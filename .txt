@@ -1,0 +1,159 @@
+🧠 ENTONCES... ¿QUÉ NECESITÁS PENSAR Y ARMAR?
+Una plataforma de cursos al estilo Udemy, sin pagos, pero con manejo de:
+
+Usuarios (alumnos, profesores, admins)
+
+Cursos (con clases, videos, textos, tests)
+
+Accesos (el alumno pide entrar al curso y se le aprueba)
+
+Avance y progreso (% de curso completado)
+
+🔧 STACK:
+✅ Frontend: React + TypeScript
+✅ Backend: Node.js + Express + TypeScript
+✅ DB: MySQL
+✅ ORM: Sequelize
+✅ Auth: JWT + Cookies o localStorage
+✅ Almacenamiento de videos: AWS S3 o algún bucket público (puede ser local en dev)
+✅ Subida de archivos: multer
+✅ Panel Admin / Profesor: Para subir clases y aprobar alumnos
+
+🔐 ROLES:
+Admin
+
+Puede crear cursos
+
+Aprobar profesores
+
+Ver estadísticas
+
+Profesor
+
+Crea sus propios cursos
+
+Sube clases (video, texto, tests)
+
+Aprueba o rechaza solicitudes de alumnos
+
+Alumno
+
+Pide acceso a cursos
+
+Ve su progreso
+
+Rinde tests o quizzes
+
+Puede dejar comentarios
+
+📦 MODELOS PRINCIPALES EN SEQUELIZE (ESBOZO):
+🔸 User
+ts
+Copy
+Edit
+id | name | email | password | role (admin, prof, student)
+🔸 Course
+ts
+Copy
+Edit
+id | title | description | createdBy (UserId) | isPublished
+🔸 Section (módulos dentro del curso)
+ts
+Copy
+Edit
+id | title | courseId
+🔸 Lesson (cada clase)
+ts
+Copy
+Edit
+id | title | videoUrl | textContent | sectionId | order
+🔸 Enrollment
+ts
+Copy
+Edit
+id | userId | courseId | status (pending, approved) | progress (0-100)
+🔸 Quiz
+ts
+Copy
+Edit
+id | lessonId | question | correctAnswer | wrongAnswers (array o tabla aparte)
+🔸 Answer
+ts
+Copy
+Edit
+id | userId | quizId | selectedAnswer | isCorrect
+🧠 FLUJO GENERAL:
+Alumno se registra
+
+Alumno pide acceso a un curso
+
+Profesor aprueba la solicitud
+
+Alumno empieza a ver lecciones por sección
+
+Sistema marca lecciones completadas
+
+Progreso se actualiza
+
+Puede hacer quizzes
+
+Admin ve estadísticas y todo el sistema
+
+🛠 FUNCIONALIDADES PRINCIPALES:
+Alumno:
+Listado de cursos disponibles
+
+Solicitud de acceso
+
+Ver progreso
+
+Ver clase con video/texto
+
+Hacer quizzes
+
+Profesor:
+Crear curso
+
+Agregar secciones y lecciones
+
+Subir videos/textos
+
+Revisar solicitudes de alumnos
+
+Ver progreso de sus alumnos
+
+Admin:
+Ver todos los cursos
+
+Aprobar profesores
+
+Reportes globales
+
+🗂 RUTAS BACKEND (Express)
+POST /auth/register
+
+POST /auth/login
+
+GET /courses → para ver cursos publicados
+
+POST /courses/:id/request-access → el alumno pide entrar
+
+POST /courses/:id/approve-user/:userId → el profe aprueba
+
+GET /courses/:id/lessons → lecciones del curso
+
+POST /courses/:id/progress → actualizar progreso
+
+POST /quiz/:lessonId/answer → guardar respuesta del quiz
+
+💡 IDEAS DE FEATURES ADICIONALES
+Comentarios en clases
+
+Marcado de favoritos
+
+Filtrado de cursos por temática
+
+Notificaciones cuando se habilita el acceso
+
+Vista tipo “tablero” para el profesor con progreso por alumno
+
