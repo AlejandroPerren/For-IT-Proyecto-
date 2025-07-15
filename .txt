@@ -1,4 +1,3 @@
-🧠 ENTONCES... ¿QUÉ NECESITÁS PENSAR Y ARMAR?
 Una plataforma de cursos al estilo Udemy, sin pagos, pero con manejo de:
 
 Usuarios (alumnos, profesores, admins)
@@ -48,41 +47,28 @@ Puede dejar comentarios
 
 📦 MODELOS PRINCIPALES EN SEQUELIZE (ESBOZO):
 🔸 User
-ts
-Copy
-Edit
 id | name | email | password | role (admin, prof, student)
+
 🔸 Course
-ts
-Copy
-Edit
 id | title | description | createdBy (UserId) | isPublished
+
 🔸 Section (módulos dentro del curso)
-ts
-Copy
-Edit
 id | title | courseId
+
 🔸 Lesson (cada clase)
-ts
-Copy
-Edit
 id | title | videoUrl | textContent | sectionId | order
+
 🔸 Enrollment
-ts
-Copy
-Edit
 id | userId | courseId | status (pending, approved) | progress (0-100)
+
 🔸 Quiz
-ts
-Copy
-Edit
 id | lessonId | question | correctAnswer | wrongAnswers (array o tabla aparte)
+
 🔸 Answer
-ts
-Copy
-Edit
 id | userId | quizId | selectedAnswer | isCorrect
+
 🧠 FLUJO GENERAL:
+
 Alumno se registra
 
 Alumno pide acceso a un curso
@@ -101,6 +87,7 @@ Admin ve estadísticas y todo el sistema
 
 🛠 FUNCIONALIDADES PRINCIPALES:
 Alumno:
+
 Listado de cursos disponibles
 
 Solicitud de acceso
@@ -112,6 +99,7 @@ Ver clase con video/texto
 Hacer quizzes
 
 Profesor:
+
 Crear curso
 
 Agregar secciones y lecciones
@@ -123,6 +111,7 @@ Revisar solicitudes de alumnos
 Ver progreso de sus alumnos
 
 Admin:
+
 Ver todos los cursos
 
 Aprobar profesores
@@ -131,29 +120,10 @@ Reportes globales
 
 🗂 RUTAS BACKEND (Express)
 POST /auth/register
-
 POST /auth/login
-
 GET /courses → para ver cursos publicados
-
 POST /courses/:id/request-access → el alumno pide entrar
-
 POST /courses/:id/approve-user/:userId → el profe aprueba
-
 GET /courses/:id/lessons → lecciones del curso
-
 POST /courses/:id/progress → actualizar progreso
-
 POST /quiz/:lessonId/answer → guardar respuesta del quiz
-
-💡 IDEAS DE FEATURES ADICIONALES
-Comentarios en clases
-
-Marcado de favoritos
-
-Filtrado de cursos por temática
-
-Notificaciones cuando se habilita el acceso
-
-Vista tipo “tablero” para el profesor con progreso por alumno
-
