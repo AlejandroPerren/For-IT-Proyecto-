@@ -2,33 +2,47 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { LoginUser } from "../LoginUser";
 import { User } from "../../../entities/User";
 import { UserRepository } from "../../../services/UserRepository";
+import bcrypt from "bcrypt";
 
-const compareMock = vi.fn((raw: string, hashed: string) => {
-  return Promise.resolve(raw === "123456" && hashed === "hashed-password");
+// 🧪 Complete bcrypt mock with default export
+vi.mock("bcrypt", async () => {
+  return {
+    default: {
+      compare: vi.fn(),
+    },
+  };
 });
-
-vi.mock("bcrypt", () => ({
-  compare: compareMock,
-}));
 
 describe("Use Case: Login User", () => {
   let mockUserRepository: Partial<UserRepository>;
+  let loginUser: LoginUser;
+  let bcryptMock: any;
 
-  beforeEach(() => {
+  beforeEach(async () => {
+    const bcryptImport = await import("bcrypt");
+    bcryptMock = bcryptImport.default;
+
+    // 🔄 reset mock entre tests
+    vi.resetAllMocks();
+
     mockUserRepository = {
-      findByEmail: vi.fn().mockResolvedValue(
-        new User(1, "Juan", "juan@test.com", "student", "hashed-password")
-      ),
+      findByEmail: vi
+        .fn()
+        .mockResolvedValue(
+          new User(1, "Juan", "juan@test.com", "student", "hashed-password")
+        ),
     };
+
+    loginUser = new LoginUser(mockUserRepository as UserRepository);
   });
 
   /**
-   * 🚫 TEST 1: Usuario no existe
+   * 🚫 TEST 1: Should throw error if user does not exist
+   * Escenario: No existe un usuario con el email ingresado
+   * Resultado esperado: lanza error "Invalid credentials"
    */
-  it("debería lanzar error si el usuario no existe", async () => {
+  it("should throw if user does not exist", async () => {
     (mockUserRepository.findByEmail as any).mockResolvedValue(null);
-
-    const loginUser = new LoginUser(mockUserRepository as UserRepository);
 
     await expect(
       loginUser.execute("no@existe.com", "123456")
@@ -36,12 +50,12 @@ describe("Use Case: Login User", () => {
   });
 
   /**
-   * 🚫 TEST 2: Contraseña incorrecta
+   * 🚫 TEST 2: Should throw error if password is incorrect
+   * Escenario: El usuario existe, pero la contraseña es incorrecta
+   * Resultado esperado: lanza error "Invalid credentials"
    */
-  it("debería lanzar error si la contraseña es incorrecta", async () => {
-    compareMock.mockResolvedValue(false); 
-
-    const loginUser = new LoginUser(mockUserRepository as UserRepository);
+  it("should throw if password is incorrect", async () => {
+    bcryptMock.compare.mockResolvedValue(false);
 
     await expect(
       loginUser.execute("juan@test.com", "wrongpass")
@@ -49,12 +63,12 @@ describe("Use Case: Login User", () => {
   });
 
   /**
-   * ✅ TEST 3: Login exitoso
+   * ✅ TEST 3: Should login successfully if credentials are valid
+   * Escenario: El usuario existe y la contraseña es correcta
+   * Resultado esperado: devuelve el usuario correctamente
    */
-  it("debería loguear exitosamente si las credenciales son correctas", async () => {
-    compareMock.mockResolvedValue(true); 
-
-    const loginUser = new LoginUser(mockUserRepository as UserRepository);
+  it("should login successfully with correct credentials", async () => {
+    bcryptMock.compare.mockResolvedValue(true);
 
     const result = await loginUser.execute("juan@test.com", "123456");
 
