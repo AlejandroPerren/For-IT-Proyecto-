@@ -6,7 +6,7 @@ import { Dialect, Sequelize } from 'sequelize';: Aquí importamos dos cosas clav
         
     Dialect: Este es un tipo de TypeScript que representa los distintos tipos de bases de datos que Sequelize puede conectar (por ejemplo, 'mysql', 'postgres', 'sqlite', 'mssql'). Nos ayuda a asegurar la seguridad de tipos cuando especificamos el dialecto de la base de datos.
  */
-import env from '../env';
+import env from './env';
 /*
 import env from '../env';: Esto importa un módulo env desde un archivo relativo (probablemente ../env.ts o ../env.js). Este archivo env (de "environment", entorno) suele contener variables de configuración sensibles, como las credenciales de la base de datos, para mantenerlas separadas del código principal y que no queden expuestas directamente en el repositorio de código.
  */
