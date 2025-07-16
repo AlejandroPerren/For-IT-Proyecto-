@@ -1,17 +1,16 @@
-import { User } from "../../entities/User";
 import { UserRepository } from "../../services/UserRepository";
 import bcrypt from "bcrypt";
 
-export class RegisterUser {
+export class LoginUser {
   constructor(private userRepo: UserRepository) {}
 
-  async execute(name: string, email: string, password: string) {
-    const existing = await this.userRepo.findByEmail(email);
-    if (existing) throw new Error("User already exists");
+  async execute(email: string, password: string) {
+    const user = await this.userRepo.findByEmail(email);
+    if (!user) throw new Error("Invalid credentials");
 
-    const hashed = await bcrypt.hash(password, 10);
-    const user = new User(0, name, email, 'student', hashed);
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) throw new Error("Invalid credentials");
 
-    return this.userRepo.create(user);
+    return user; 
   }
 }
