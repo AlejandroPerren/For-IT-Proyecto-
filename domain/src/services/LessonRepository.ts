@@ -5,5 +5,6 @@ export interface LessonRepository {
   findBySectionId(sectionId: number): Promise<Lesson[]>;
   findByCourseId(courseId: number): Promise<Lesson[]>;
   findById(id: number): Promise<Lesson | null>;
+  countByCourse(courseId: number): Promise<number>;
 }
 

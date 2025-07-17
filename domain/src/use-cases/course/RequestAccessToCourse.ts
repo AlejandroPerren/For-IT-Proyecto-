@@ -6,9 +6,16 @@ export class RequestAccessToCourse {
 
   async execute(userId: number, courseId: number) {
     const existing = await this.enrollmentRepo.findByUserAndCourse(userId, courseId);
-    if (existing) throw new Error("Already requested or enrolled");
+    if (existing) {
+      throw new Error("Already requested or enrolled");
+    }
 
-    const enrollment = new Enrollment(0, userId, courseId, 'pending', 0);
-    return this.enrollmentRepo.create(enrollment);
+    // Creamos una entidad con id temporal (0)
+    const enrollment = new Enrollment(0, userId, courseId, "pending", 0);
+
+    // El repo asignará el id real
+    const created = await this.enrollmentRepo.create(enrollment);
+
+    return created;
   }
 }

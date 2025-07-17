@@ -1,23 +1,41 @@
-import { LessonRepository } from "../../services/LessonRepository";
+import { CompletedLessonRepository } from "../../services/CompleteLesson";
 import { EnrollmentRepository } from "../../services/EnrollmentRepository";
-
+import { LessonRepository } from "../../services/LessonRepository";
 export class CompleteLesson {
   constructor(
-    private lessonRepo: LessonRepository,
-    private enrollmentRepo: EnrollmentRepository
+    private completedLessonRepo: CompletedLessonRepository,
+    private enrollmentRepo: EnrollmentRepository,
+    private lessonRepo: LessonRepository
   ) {}
 
   async execute(userId: number, courseId: number, lessonId: number) {
-    const lessons = await this.lessonRepo.findByCourseId(courseId);
-    const total = lessons.length;
-    if (total === 0) throw new Error("No lessons in course");
+    const enrollment = await this.enrollmentRepo.findByUserAndCourse(
+      userId,
+      courseId
+    );
+    if (!enrollment) {
+      throw new Error("User is not enrolled in the course");
+    }
 
-    // Este paso deberías mejorar: guardar un registro de las lecciones completadas.
-    // Suponiendo que ya se cuenta cuántas completó:
-    const completed = 1; // Agregar Calculo Real
-    const progress = Math.round((completed / total) * 100);
+    // Si ya está completada, nada
+    const already = await this.completedLessonRepo.hasCompleted(
+      userId,
+      lessonId
+    );
+    if (already) return;
 
-    await this.enrollmentRepo.updateProgress(userId, courseId, progress);
-    return progress;
+    // Marcar como completada
+    await this.completedLessonRepo.markAsCompleted(userId, lessonId);
+
+    // Recalcular progreso
+    const totalLessons = await this.lessonRepo.countByCourse(courseId);
+    const completed = await this.completedLessonRepo.countCompletedLessons(
+      userId,
+      courseId
+    );
+    const percent =
+      totalLessons > 0 ? Math.round((completed / totalLessons) * 100) : 0;
+
+    await this.enrollmentRepo.updateProgress(userId, courseId, percent);
   }
 }
