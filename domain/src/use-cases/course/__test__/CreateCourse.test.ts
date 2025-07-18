@@ -16,9 +16,9 @@ describe("Use Case: Create Course", () => {
     };
   });
 
-  /**
-   * 🚫 TEST: should throw if title is empty
-   */
+  /* ------------------------------------------------------------------
+   * ❌ Título vacío → debe lanzar error "Title is required"
+   * ------------------------------------------------------------------ */
   it("should throw if title is empty", async () => {
     const createCourse = new CreateCourse(mockCourseRepository);
 
@@ -27,9 +27,9 @@ describe("Use Case: Create Course", () => {
     );
   });
 
-  /**
-   * 🚫 TEST: should throw if description is empty
-   */
+  /* ------------------------------------------------------------------
+   * ❌ Descripción vacía → debe lanzar error "Description is required"
+   * ------------------------------------------------------------------ */
   it("should throw if description is empty", async () => {
     const createCourse = new CreateCourse(mockCourseRepository);
 
@@ -38,11 +38,9 @@ describe("Use Case: Create Course", () => {
     );
   });
 
-  /**
-   * ✅ TEST: Should create course with given data
-   * Escenario: Se pasa un título, descripción y el ID del creador
-   * Resultado esperado: se crea el curso correctamente
-   */
+  /* ------------------------------------------------------------------
+   * ✅ Curso válido → debe crearse correctamente con los datos dados
+   * ------------------------------------------------------------------ */
   it("should create course with given data", async () => {
     const input = {
       title: "Curso de TypeScript",

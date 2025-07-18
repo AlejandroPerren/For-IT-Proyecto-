@@ -4,7 +4,7 @@ import { User } from "../../../entities/User";
 import { UserRepository } from "../../../services/UserRepository";
 import bcrypt from "bcrypt";
 
-// 🧪 Complete bcrypt mock with default export
+// 🧪 Mock de bcrypt con compare
 vi.mock("bcrypt", async () => {
   return {
     default: {
@@ -22,7 +22,7 @@ describe("Use Case: Login User", () => {
     const bcryptImport = await import("bcrypt");
     bcryptMock = bcryptImport.default;
 
-    // 🔄 reset mock entre tests
+    // 🔄 Resetear mocks antes de cada test
     vi.resetAllMocks();
 
     mockUserRepository = {
@@ -36,11 +36,9 @@ describe("Use Case: Login User", () => {
     loginUser = new LoginUser(mockUserRepository as UserRepository);
   });
 
-  /**
-   * 🚫 TEST 1: Should throw error if user does not exist
-   * Escenario: No existe un usuario con el email ingresado
-   * Resultado esperado: lanza error "Invalid credentials"
-   */
+  /* ------------------------------------------------------------------
+   * ❌ Usuario inexistente → lanza error "Invalid credentials"
+   * ------------------------------------------------------------------ */
   it("should throw if user does not exist", async () => {
     (mockUserRepository.findByEmail as any).mockResolvedValue(null);
 
@@ -49,11 +47,9 @@ describe("Use Case: Login User", () => {
     ).rejects.toThrow("Invalid credentials");
   });
 
-  /**
-   * 🚫 TEST 2: Should throw error if password is incorrect
-   * Escenario: El usuario existe, pero la contraseña es incorrecta
-   * Resultado esperado: lanza error "Invalid credentials"
-   */
+  /* ------------------------------------------------------------------
+   * ❌ Contraseña incorrecta → lanza error "Invalid credentials"
+   * ------------------------------------------------------------------ */
   it("should throw if password is incorrect", async () => {
     bcryptMock.compare.mockResolvedValue(false);
 
@@ -62,11 +58,9 @@ describe("Use Case: Login User", () => {
     ).rejects.toThrow("Invalid credentials");
   });
 
-  /**
-   * ✅ TEST 3: Should login successfully if credentials are valid
-   * Escenario: El usuario existe y la contraseña es correcta
-   * Resultado esperado: devuelve el usuario correctamente
-   */
+  /* ------------------------------------------------------------------
+   * ✅ Credenciales válidas → devuelve el usuario correctamente
+   * ------------------------------------------------------------------ */
   it("should login successfully with correct credentials", async () => {
     bcryptMock.compare.mockResolvedValue(true);
 

@@ -4,7 +4,7 @@ import { User } from "../../../entities/User";
 import { UserRepository } from "../../../services/UserRepository";
 import bcrypt from "bcrypt";
 
-// 🧪 Complete bcrypt mock with default export
+// 🧪 Mock de bcrypt con hash
 vi.mock("bcrypt", async () => {
   return {
     default: {
@@ -26,11 +26,9 @@ describe("Use Case: Register User", () => {
     };
   });
 
-  /**
-   * 🚫 TEST 1: Should throw if user already exists
-   * Escenario: Ya existe un usuario con ese email
-   * Resultado esperado: lanza error "User already exists"
-   */
+  /* ------------------------------------------------------------------
+   * ❌ Usuario ya existe → lanza error "User already exists"
+   * ------------------------------------------------------------------ */
   it("should throw if user already exists", async () => {
     const existingUser = new User(42, "Ya Existe", "juan@test.com", "student", "xxx");
     (mockUserRepository.findByEmail as any).mockResolvedValue(existingUser);
@@ -42,11 +40,9 @@ describe("Use Case: Register User", () => {
     ).rejects.toThrow("User already exists");
   });
 
-  /**
-   * ✅ TEST 2: Should register user if email is not taken
-   * Escenario: No existe ningún usuario con ese email
-   * Resultado esperado: crea correctamente el usuario
-   */
+  /* ------------------------------------------------------------------
+   * ✅ Email disponible → crea usuario correctamente
+   * ------------------------------------------------------------------ */
   it("should create new user if email is not taken", async () => {
     const input = {
       name: "Juan Pérez",

@@ -27,11 +27,9 @@ describe("Use Case: Request Access To Course", () => {
     } as unknown as EnrollmentRepository;
   });
 
-  /**
-   * 🚫 TEST: Should throw if already requested or enrolled
-   * Escenario: Ya existe un enrollment para ese usuario y curso
-   * Resultado esperado: lanza error "Already requested or enrolled"
-   */
+  /* ------------------------------------------------------------------
+   * ❌ Ya existe inscripción → debe lanzar error "Already requested or enrolled"
+   * ------------------------------------------------------------------ */
   it("should throw if already requested or enrolled", async () => {
     const existingEnrollment = new Enrollment(1, 5, 2, "pending", 0);
     (mockEnrollmentRepo.findByUserAndCourse as any).mockResolvedValue(
@@ -45,11 +43,9 @@ describe("Use Case: Request Access To Course", () => {
     );
   });
 
-  /**
-   * ✅ TEST: Should create new pending enrollment
-   * Escenario: No existe un enrollment previo
-   * Resultado esperado: se crea un nuevo enrollment en estado "pending"
-   */
+  /* ------------------------------------------------------------------
+   * ✅ Sin inscripción previa → crea nueva inscripción en estado "pending"
+   * ------------------------------------------------------------------ */
   it("should create new pending enrollment", async () => {
     (mockEnrollmentRepo.findByUserAndCourse as any).mockResolvedValue(null);
 
