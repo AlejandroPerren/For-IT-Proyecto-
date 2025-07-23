@@ -1,9 +1,7 @@
-export class Course {
-  constructor(
-    public id: number,
-    public title: string,
-    public description: string,
-    public createdBy: number,
-    public isPublished: boolean
-  ) {}
+export interface Course {
+  id: number;
+  title: string;
+  description: string;
+  createdBy: number;
+  isPublished: boolean;
 }

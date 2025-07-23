@@ -1,11 +1,9 @@
-export type EnrollmentStatus = 'pending' | 'approved';
+export type EnrollmentStatus = "pending" | "approved";
 
-export class Enrollment {
-  constructor(
-    public id: number,
-    public userId: number,
-    public courseId: number,
-    public status: EnrollmentStatus,
-    public progress: number
-  ) {}
+export interface Enrollment {
+  id: number;
+  userId: number;
+  courseId: number;
+  status: EnrollmentStatus;
+  progress: number;
 }

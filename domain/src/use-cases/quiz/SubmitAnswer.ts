@@ -2,19 +2,33 @@ import { QuizRepository } from "../../services/QuizRepository";
 import { AnswerRepository } from "../../services/AnswerRepository";
 import { Answer } from "../../entities/Answer";
 
-export class SubmitAnswer {
-  constructor(
-    private quizRepo: QuizRepository,
-    private answerRepo: AnswerRepository
-  ) {}
+export interface SubmitAnswerDependencies {
+  quizRepo: QuizRepository;
+  answerRepo: AnswerRepository;
+}
 
-  async execute(userId: number, quizId: number, selectedAnswer: string) {
-    const quiz = await this.quizRepo.findById(quizId);
-    if (!quiz) throw new Error("Quiz not found");
+export interface SubmitAnswerInput {
+  userId: number;
+  quizId: number;
+  selectedAnswer: string;
+}
 
-    const isCorrect = quiz.correctAnswer === selectedAnswer;
-    const answer = new Answer(0, userId, quizId, selectedAnswer, isCorrect);
+export async function SubmitAnswer(
+  { quizRepo, answerRepo }: SubmitAnswerDependencies,
+  { userId, quizId, selectedAnswer }: SubmitAnswerInput
+): Promise<Answer> {
+  const quiz = await quizRepo.findById(quizId);
+  if (!quiz) throw new Error("Quiz not found");
 
-    return this.answerRepo.save(answer);
-  }
+  const isCorrect = quiz.correctAnswer === selectedAnswer;
+
+  const answer: Answer = {
+    id: 0, // se asignará en el repo
+    userId,
+    quizId,
+    selectedAnswer,
+    isCorrect,
+  };
+
+  return answerRepo.save(answer);
 }

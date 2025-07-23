@@ -1,7 +1,5 @@
-export class Section {
-  constructor(
-    public id: number,
-    public title: string,
-    public courseId: number
-  ) {}
+export interface Section {
+  id: number;
+  title: string;
+  courseId: number;
 }

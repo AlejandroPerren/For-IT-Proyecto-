@@ -1,41 +1,39 @@
 import { CompletedLessonRepository } from "../../services/CompleteLesson";
 import { EnrollmentRepository } from "../../services/EnrollmentRepository";
 import { LessonRepository } from "../../services/LessonRepository";
-export class CompleteLesson {
-  constructor(
-    private completedLessonRepo: CompletedLessonRepository,
-    private enrollmentRepo: EnrollmentRepository,
-    private lessonRepo: LessonRepository
-  ) {}
 
-  async execute(userId: number, courseId: number, lessonId: number) {
-    const enrollment = await this.enrollmentRepo.findByUserAndCourse(
-      userId,
-      courseId
-    );
-    if (!enrollment) {
-      throw new Error("User is not enrolled in the course");
-    }
+export interface CompleteLessonDependencies {
+  completedLessonRepo: CompletedLessonRepository;
+  enrollmentRepo: EnrollmentRepository;
+  lessonRepo: LessonRepository;
+}
 
-    // Si ya está completada, nada
-    const already = await this.completedLessonRepo.hasCompleted(
-      userId,
-      lessonId
-    );
-    if (already) return;
+export interface CompleteLessonInput {
+  userId: number;
+  courseId: number;
+  lessonId: number;
+}
 
-    // Marcar como completada
-    await this.completedLessonRepo.markAsCompleted(userId, lessonId);
-
-    // Recalcular progreso
-    const totalLessons = await this.lessonRepo.countByCourse(courseId);
-    const completed = await this.completedLessonRepo.countCompletedLessons(
-      userId,
-      courseId
-    );
-    const percent =
-      totalLessons > 0 ? Math.round((completed / totalLessons) * 100) : 0;
-
-    await this.enrollmentRepo.updateProgress(userId, courseId, percent);
+export async function CompleteLesson(
+  { completedLessonRepo, enrollmentRepo, lessonRepo }: CompleteLessonDependencies,
+  { userId, courseId, lessonId }: CompleteLessonInput
+): Promise<void> {
+  const enrollment = await enrollmentRepo.findByUserAndCourse(userId, courseId);
+  if (!enrollment) {
+    throw new Error("User is not enrolled in the course");
   }
+
+  const alreadyCompleted = await completedLessonRepo.hasCompleted(userId, lessonId);
+  if (alreadyCompleted) return;
+
+  await completedLessonRepo.markAsCompleted(userId, lessonId);
+
+  const totalLessons = await lessonRepo.countByCourse(courseId);
+  const completedLessons = await completedLessonRepo.countCompletedLessons(userId, courseId);
+
+  const percent = totalLessons > 0
+    ? Math.round((completedLessons / totalLessons) * 100)
+    : 0;
+
+  await enrollmentRepo.updateProgress(userId, courseId, percent);
 }

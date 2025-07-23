@@ -1,9 +1,16 @@
 import { QuizRepository } from "../../services/QuizRepository";
 
-export class GetQuizByLesson {
-  constructor(private quizRepo: QuizRepository) {}
+export interface GetQuizByLessonDependencies {
+  quizRepo: QuizRepository;
+}
 
-  async execute(lessonId: number) {
-    return this.quizRepo.findByLessonId(lessonId);
-  }
+export interface GetQuizByLessonInput {
+  lessonId: number;
+}
+
+export async function GetQuizByLesson(
+  { quizRepo }: GetQuizByLessonDependencies,
+  { lessonId }: GetQuizByLessonInput
+) {
+  return quizRepo.findByLessonId(lessonId);
 }

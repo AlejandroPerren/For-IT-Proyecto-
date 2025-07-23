@@ -1,7 +1,5 @@
-export class CompletedLesson {
-  constructor(
-    public userId: number,
-    public lessonId: number,
-    public completedAt: Date
-  ) {}
+export interface CompletedLesson {
+  userId: number;
+  lessonId: number;
+  completedAt: Date;
 }
