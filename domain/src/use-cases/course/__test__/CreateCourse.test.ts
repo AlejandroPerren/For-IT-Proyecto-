@@ -1,70 +1,64 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { CreateCourse } from "../CreateCourse";
-import { Course } from "../../../entities/Course";
-import { CourseRepository } from "../../../services/CourseRepository";
+import { mockCourseRepository } from "../../../mocks/CourseRepository.mock";
 
-describe("Use Case: Create Course", () => {
-  let mockCourseRepository: CourseRepository;
+describe("Given various course data", () => {
+  let repo: ReturnType<typeof mockCourseRepository>;
 
   beforeEach(() => {
-    mockCourseRepository = {
-      create: vi.fn((course: Course) => Promise.resolve({ ...course, id: 1 })),
-      findById: vi.fn(),
-      findPublished: vi.fn(),
-      findByUserId: vi.fn(),
-      publishCourse: vi.fn(),
-    };
+    repo = mockCourseRepository();
   });
 
-  /* ------------------------------------------------------------------
-   * ❌ Título vacío → debe lanzar error "Title is required"
-   * ------------------------------------------------------------------ */
-  it("should throw if title is empty", async () => {
-    const createCourse = new CreateCourse(mockCourseRepository);
+  describe("When title is null or empty", () => {
+    it("Then it should throw 'Title is required' if title is null", async () => {
+      await expect(
+        CreateCourse(
+          { courseRepo: repo },
+          { title: null as any, description: "desc", createdBy: 1 }
+        )
+      ).rejects.toThrow("Title is required");
+    });
 
-    await expect(createCourse.execute("", "desc", 1)).rejects.toThrow(
-      "Title is required"
-    );
+    it("Then it should throw 'Title is required' if title is an empty string", async () => {
+      await expect(
+        CreateCourse(
+          { courseRepo: repo },
+          { title: "   ", description: "desc", createdBy: 1 }
+        )
+      ).rejects.toThrow("Title is required");
+    });
   });
 
-  /* ------------------------------------------------------------------
-   * ❌ Descripción vacía → debe lanzar error "Description is required"
-   * ------------------------------------------------------------------ */
-  it("should throw if description is empty", async () => {
-    const createCourse = new CreateCourse(mockCourseRepository);
-
-    await expect(createCourse.execute("title", "", 1)).rejects.toThrow(
-      "Description is required"
-    );
+  describe("When description is empty", () => {
+    it("Then it should throw 'Description is required'", async () => {
+      await expect(
+        CreateCourse(
+          { courseRepo: repo },
+          { title: "Course Title", description: "   ", createdBy: 1 }
+        )
+      ).rejects.toThrow("Description is required");
+    });
   });
 
-  /* ------------------------------------------------------------------
-   * ✅ Curso válido → debe crearse correctamente con los datos dados
-   * ------------------------------------------------------------------ */
-  it("should create course with given data", async () => {
-    const input = {
-      title: "Curso de TypeScript",
-      description: "Aprende TypeScript desde cero",
-      createdBy: 10,
-    };
+  describe("When executing CreateCourse use case", () => {
+    it("Then it should create a course if the input data is valid", async () => {
+      const input = {
+        title: "Test Course",
+        description: "This is a course",
+        createdBy: 1,
+      };
 
-    const createCourse = new CreateCourse(mockCourseRepository);
-    const result = await createCourse.execute(
-      input.title,
-      input.description,
-      input.createdBy
-    );
+     
+      repo.create = vi.fn(repo.create);
 
-    expect(mockCourseRepository.create).toHaveBeenCalled();
+      const result = await CreateCourse({ courseRepo: repo }, input);
 
-    expect(result).toEqual(
-      expect.objectContaining({
+      expect(repo.create).toHaveBeenCalled();
+      expect(result).toEqual({
         id: 1,
-        title: input.title,
-        description: input.description,
-        createdBy: input.createdBy,
+        ...input,
         isPublished: false,
-      })
-    );
+      });
+    });
   });
 });

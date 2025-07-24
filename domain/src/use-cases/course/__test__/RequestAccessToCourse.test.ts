@@ -1,74 +1,49 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { RequestAccessToCourse } from "../RequestAccessToCourse";
-import { Enrollment } from "../../../entities/Enrollment";
-import { EnrollmentRepository } from "../../../services/EnrollmentRepository";
+import { mockEnrollmentRepository } from "../../../mocks/EnrollmentRepository.mock";
 
-describe("Use Case: Request Access To Course", () => {
-  let mockEnrollmentRepo: EnrollmentRepository;
+describe("Given a user requesting course access", () => {
+  let repo: ReturnType<typeof mockEnrollmentRepository>;
 
   beforeEach(() => {
-    mockEnrollmentRepo = {
-      create: vi.fn((enrollment: Enrollment) =>
-        Promise.resolve(
-          new Enrollment(
-            1, // id asignado por persistencia
-            enrollment.userId,
-            enrollment.courseId,
-            enrollment.status,
-            enrollment.progress
-          )
-        )
-      ),
-      findByUserAndCourse: vi.fn(),
-      approve: vi.fn(),
-      updateProgress: vi.fn(),
-      getProgress: vi.fn(),
-      findEnrolledUsers: vi.fn(),
-    } as unknown as EnrollmentRepository;
+    repo = mockEnrollmentRepository();
   });
 
-  /* ------------------------------------------------------------------
-   * ❌ Ya existe inscripción → debe lanzar error "Already requested or enrolled"
-   * ------------------------------------------------------------------ */
-  it("should throw if already requested or enrolled", async () => {
-    const existingEnrollment = new Enrollment(1, 5, 2, "pending", 0);
-    (mockEnrollmentRepo.findByUserAndCourse as any).mockResolvedValue(
-      existingEnrollment
-    );
-
-    const requestAccess = new RequestAccessToCourse(mockEnrollmentRepo);
-
-    await expect(requestAccess.execute(5, 2)).rejects.toThrow(
-      "Already requested or enrolled"
-    );
-  });
-
-  /* ------------------------------------------------------------------
-   * ✅ Sin inscripción previa → crea nueva inscripción en estado "pending"
-   * ------------------------------------------------------------------ */
-  it("should create new pending enrollment", async () => {
-    (mockEnrollmentRepo.findByUserAndCourse as any).mockResolvedValue(null);
-
-    const input = { userId: 5, courseId: 2 };
-
-    const requestAccess = new RequestAccessToCourse(mockEnrollmentRepo);
-
-    const result = await requestAccess.execute(input.userId, input.courseId);
-
-    expect(mockEnrollmentRepo.findByUserAndCourse).toHaveBeenCalledWith(
-      input.userId,
-      input.courseId
-    );
-    expect(mockEnrollmentRepo.create).toHaveBeenCalled();
-
-    expect(result).toEqual(
-      expect.objectContaining({
+  describe("When executing RequestAccessToCourse use case", () => {
+    it("Then it should throw if user is already enrolled or has a pending request", async () => {
+      const existingEnrollment = {
         id: 1,
-        userId: input.userId,
-        courseId: input.courseId,
+        userId: 5,
+        courseId: 2,
         status: "pending",
         progress: 0,
-      })
-    );
+      };
+
+      repo.findByUserAndCourse = vi.fn().mockResolvedValue(existingEnrollment);
+
+      await expect(
+        RequestAccessToCourse({ enrollmentRepo: repo }, { userId: 5, courseId: 2 })
+      ).rejects.toThrow("Already requested or enrolled");
+    });
+
+    it("Then it should create a new pending enrollment if user is not enrolled", async () => {
+      repo.findByUserAndCourse = vi.fn().mockResolvedValue(null);
+      repo.create = vi.fn().mockImplementation(async (e) => ({ ...e, id: 1 }));
+
+      const input = { userId: 5, courseId: 2 };
+
+      const result = await RequestAccessToCourse({ enrollmentRepo: repo }, input);
+
+      expect(repo.findByUserAndCourse).toHaveBeenCalledWith(5, 2);
+      expect(repo.create).toHaveBeenCalled();
+
+      expect(result).toEqual({
+        id: 1,
+        userId: 5,
+        courseId: 2,
+        status: "pending",
+        progress: 0,
+      });
+    });
   });
 });

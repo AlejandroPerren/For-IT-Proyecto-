@@ -1,98 +1,61 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { SubmitAnswer } from "../SubmitAnswer";
-import type { QuizRepository } from "../../../services/QuizRepository";
-import type { AnswerRepository } from "../../../services/AnswerRepository";
-import { Answer } from "../../../entities/Answer";
-import { Quiz } from "../../../entities/Quiz";
+import { mockQuizRepository } from "../../../mocks/QuizRepository.mock";
+import { mockAnswerRepository } from "../../../mocks/AnswerRepository.mock";
 
-/*
-  Casos cubiertos:
-  1) ❌ Quiz inexistente → lanza error
-  2) ❌ Respuesta incorrecta → guarda isCorrect = false
-  3) ✅ Respuesta correcta → guarda isCorrect = true
-*/
-
-describe("Use Case: SubmitAnswer", () => {
-  let quizRepo: QuizRepository;
-  let answerRepo: AnswerRepository;
-
-  const userId = 7;
-  const quizId = 99;
-  const correctOption = "B";
-  const wrongOption = "A";
+describe("Given a user submitting an answer to a quiz", () => {
+  let quizRepo: ReturnType<typeof mockQuizRepository>;
+  let answerRepo: ReturnType<typeof mockAnswerRepository>;
 
   beforeEach(() => {
-    quizRepo = {
-      findByLessonId: vi.fn(),
-      findById: vi.fn(),
-      create: vi.fn(),
-    };
-
-    answerRepo = {
-      save: vi.fn(),
-      findByUserAndQuiz: vi.fn(),
-      findAllByUserAndLesson: vi.fn(),
-    };
+    quizRepo = mockQuizRepository();
+    answerRepo = mockAnswerRepository();
   });
 
-  /* -----------------------------------------------------------------------
-   * ❌ Quiz no existe → lanza Error("Quiz not found")
-   * --------------------------------------------------------------------- */
-  it("should throw if quiz does not exist", async () => {
-    (quizRepo.findById as any).mockResolvedValue(null);
+  describe("When the quiz does not exist", () => {
+    it("Then it should throw 'Quiz not found'", async () => {
+      quizRepo.findById = vi.fn().mockResolvedValue(null);
 
-    const uc = new SubmitAnswer(quizRepo, answerRepo);
-
-    await expect(uc.execute(userId, quizId, correctOption)).rejects.toThrow(
-      "Quiz not found"
-    );
-
-    expect(answerRepo.save).not.toHaveBeenCalled();
+      await expect(
+        SubmitAnswer({ quizRepo, answerRepo }, { userId: 1, quizId: 99, selectedAnswer: "A" })
+      ).rejects.toThrow("Quiz not found");
+    });
   });
 
-  /* -----------------------------------------------------------------------
-   * ❌ Respuesta incorrecta → guarda isCorrect = false
-   * --------------------------------------------------------------------- */
-  it("should save answer marked incorrect when selectedAnswer != quiz.correctAnswer", async () => {
-    const quiz = new Quiz(quizId, 123, "Pregunta?", ["A", "B", "C"], correctOption);
-    (quizRepo.findById as any).mockResolvedValue(quiz);
+  describe("When the quiz exists", () => {
+    it("Then it should save and return the answer with isCorrect = true if correct", async () => {
+      const quiz = { id: 1, question: "Q?", correctAnswer: "A" };
+      quizRepo.findById = vi.fn().mockResolvedValue(quiz);
+      answerRepo.save = vi.fn().mockImplementation(async (answer) => ({ ...answer, id: 5 }));
 
-    (answerRepo.save as any).mockImplementation(async (ans: Answer) => {
-      return new Answer(1, ans.userId, ans.quizId, ans.selectedAnswer, ans.isCorrect);
+      const result = await SubmitAnswer(
+        { quizRepo, answerRepo },
+        { userId: 2, quizId: 1, selectedAnswer: "A" }
+      );
+
+      expect(quizRepo.findById).toHaveBeenCalledWith(1);
+      expect(answerRepo.save).toHaveBeenCalled();
+      expect(result).toEqual({
+        id: 5,
+        userId: 2,
+        quizId: 1,
+        selectedAnswer: "A",
+        isCorrect: true,
+      });
     });
 
-    const uc = new SubmitAnswer(quizRepo, answerRepo);
-    const saved = await uc.execute(userId, quizId, wrongOption);
+    it("Then it should save and return the answer with isCorrect = false if incorrect", async () => {
+      const quiz = { id: 1, question: "Q?", correctAnswer: "A" };
+      quizRepo.findById = vi.fn().mockResolvedValue(quiz);
+      answerRepo.save = vi.fn().mockImplementation(async (answer) => ({ ...answer, id: 6 }));
 
-    expect(quizRepo.findById).toHaveBeenCalledWith(quizId);
-    expect(answerRepo.save).toHaveBeenCalled();
+      const result = await SubmitAnswer(
+        { quizRepo, answerRepo },
+        { userId: 3, quizId: 1, selectedAnswer: "B" }
+      );
 
-    const arg = (answerRepo.save as any).mock.calls[0][0] as Answer;
-    expect(arg.isCorrect).toBe(false);
-    expect(arg.selectedAnswer).toBe(wrongOption);
-    expect(saved.isCorrect).toBe(false);
-  });
-
-  /* -----------------------------------------------------------------------
-   * ✅ Respuesta correcta → guarda isCorrect = true
-   * --------------------------------------------------------------------- */
-  it("should save answer marked correct when selectedAnswer == quiz.correctAnswer", async () => {
-    const quiz = new Quiz(quizId, 123, "Pregunta?", ["A", "B", "C"], correctOption);
-    (quizRepo.findById as any).mockResolvedValue(quiz);
-
-    (answerRepo.save as any).mockImplementation(async (ans: Answer) => {
-      return new Answer(2, ans.userId, ans.quizId, ans.selectedAnswer, ans.isCorrect);
+      expect(result.isCorrect).toBe(false);
+      expect(result.selectedAnswer).toBe("B");
     });
-
-    const uc = new SubmitAnswer(quizRepo, answerRepo);
-    const saved = await uc.execute(userId, quizId, correctOption);
-
-    expect(quizRepo.findById).toHaveBeenCalledWith(quizId);
-    expect(answerRepo.save).toHaveBeenCalled();
-
-    const arg = (answerRepo.save as any).mock.calls[0][0] as Answer;
-    expect(arg.isCorrect).toBe(true);
-    expect(arg.selectedAnswer).toBe(correctOption);
-    expect(saved.isCorrect).toBe(true);
   });
 });

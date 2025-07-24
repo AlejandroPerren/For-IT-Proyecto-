@@ -18,6 +18,10 @@ export async function CompleteLesson(
   { completedLessonRepo, enrollmentRepo, lessonRepo }: CompleteLessonDependencies,
   { userId, courseId, lessonId }: CompleteLessonInput
 ): Promise<void> {
+  if (!userId || !courseId || !lessonId) {
+    throw new Error("Invalid parameters");
+  }
+
   const enrollment = await enrollmentRepo.findByUserAndCourse(userId, courseId);
   if (!enrollment) {
     throw new Error("User is not enrolled in the course");

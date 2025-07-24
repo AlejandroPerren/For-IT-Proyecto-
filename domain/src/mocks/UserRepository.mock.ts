@@ -21,5 +21,21 @@ export function mockUserRepository(initialUsers: User[] = []): MockedUserReposit
       users.push(newUser);
       return { ...newUser };
     },
+    
+    async findById(id: number): Promise<User | null> {
+      const user = users.find((u) => u.id === id);
+      return user ? { ...user } : null;
+    },
+
+    async findAllPendingProfessors(): Promise<User[]> {
+      return users.filter((u) => u.role === "pending").map((u) => ({ ...u }));
+    },
+
+    async approveProfessor(id: number): Promise<void> {
+      const user = users.find((u) => u.id === id);
+      if (user) {
+        user.role = "professor";
+      }
+    },
   };
 }

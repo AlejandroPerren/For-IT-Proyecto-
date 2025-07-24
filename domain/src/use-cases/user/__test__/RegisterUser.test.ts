@@ -1,72 +1,63 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { RegisterUser } from "../RegisterUser";
-import { User } from "../../../entities/User";
-import { UserRepository } from "../../../services/UserRepository";
 import bcrypt from "bcrypt";
+import { mockUserRepository } from "../../../mocks/UserRepository.mock";
 
-// 🧪 Mock de bcrypt con hash
-vi.mock("bcrypt", async () => {
-  return {
-    default: {
-      hash: vi.fn(() => Promise.resolve("hashed-password")),
-    },
-  };
-});
+vi.mock("bcrypt", () => ({
+  default: {
+    hash: vi.fn(),
+  },
+}));
 
-describe("Use Case: Register User", () => {
-  let mockUserRepository: UserRepository;
+describe("Given a new user to register", () => {
+  let userRepo: ReturnType<typeof mockUserRepository>;
+  const mockHash = bcrypt.hash as unknown as ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
-    mockUserRepository = {
-      findByEmail: vi.fn().mockResolvedValue(null),
-      create: vi.fn((user: User) => Promise.resolve({ ...user, id: 1 })),
-      findById: vi.fn(),
-      findAllPendingProfessors: vi.fn(),
-      approveProfessor: vi.fn(),
-    };
+    userRepo = mockUserRepository();
+    vi.resetAllMocks();
   });
 
-  /* ------------------------------------------------------------------
-   * ❌ Usuario ya existe → lanza error "User already exists"
-   * ------------------------------------------------------------------ */
-  it("should throw if user already exists", async () => {
-    const existingUser = new User(42, "Ya Existe", "juan@test.com", "student", "xxx");
-    (mockUserRepository.findByEmail as any).mockResolvedValue(existingUser);
+  describe("When email is already in use", () => {
+    it("Then it should throw 'User already exists'", async () => {
+      userRepo.findByEmail = vi
+        .fn()
+        .mockResolvedValue({ id: 1, email: "test@example.com" });
 
-    const registerUser = new RegisterUser(mockUserRepository);
-
-    await expect(
-      registerUser.execute("Juan", "juan@test.com", "123456")
-    ).rejects.toThrow("User already exists");
+      await expect(
+        RegisterUser(
+          { userRepo },
+          { name: "Test", email: "test@example.com", password: "123" }
+        )
+      ).rejects.toThrow("User already exists");
+    });
   });
 
-  /* ------------------------------------------------------------------
-   * ✅ Email disponible → crea usuario correctamente
-   * ------------------------------------------------------------------ */
-  it("should create new user if email is not taken", async () => {
-    const input = {
-      name: "Juan Pérez",
-      email: "juan@test.com",
-      password: "123456",
-    };
+  describe("When email is new", () => {
+    it("Then it should hash the password and create the user", async () => {
+      userRepo.findByEmail = vi.fn().mockResolvedValue(null);
+      mockHash.mockResolvedValue("hashed123");
 
-    const registerUser = new RegisterUser(mockUserRepository);
+      userRepo.create = vi
+        .fn()
+        .mockImplementation(async (u) => ({ ...u, id: 1 }));
 
-    const createdUser = await registerUser.execute(input.name, input.email, input.password);
+      const input = {
+        name: "Test",
+        email: "test@example.com",
+        password: "123",
+      };
+      const result = await RegisterUser({ userRepo }, input);
 
-    expect(mockUserRepository.findByEmail).toHaveBeenCalledWith(input.email);
-
-    const bcryptMock = await import("bcrypt");
-    expect(bcryptMock.default.hash).toHaveBeenCalledWith(input.password, 10);
-
-    expect(mockUserRepository.create).toHaveBeenCalled();
-
-    expect(createdUser).toEqual(expect.objectContaining({
-      id: 1,
-      name: input.name,
-      email: input.email,
-      role: "student",
-      password: "hashed-password",
-    }));
+      expect(mockHash).toHaveBeenCalledWith("123", 10);
+      expect(userRepo.create).toHaveBeenCalled();
+      expect(result).toEqual({
+        id: 1,
+        name: "Test",
+        email: "test@example.com",
+        role: "student",
+        password: "hashed123",
+      });
+    });
   });
 });
