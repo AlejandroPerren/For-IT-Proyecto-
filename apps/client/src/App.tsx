@@ -1,9 +1,15 @@
+import { Outlet } from "react-router-dom"
+import Nav from "./compontents/main/Nav"
+
 
 function App() {
 
 
   return (
-    <h1 className='text-red-400'>Holaa</h1>
+    <div>
+      <Nav></Nav>
+      <Outlet/>
+    </div>
   )
 }
 
