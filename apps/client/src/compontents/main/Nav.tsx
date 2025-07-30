@@ -4,8 +4,7 @@ import { navLinks } from "../../constants/navlinks";
 const Nav = () => {
   const [navBg, setNavBg] = useState(true);
 
-  
-  const userRole = "user"; 
+  const userRole = "user";
 
   useEffect(() => {
     const navBgHandler = () => {
@@ -17,7 +16,9 @@ const Nav = () => {
     return () => window.removeEventListener("scroll", navBgHandler);
   }, []);
 
-  const filteredLinks = navLinks.filter(link => link.roles.includes(userRole));
+  const filteredLinks = navLinks.filter((link) =>
+    link.roles.includes(userRole)
+  );
 
   return (
     <div

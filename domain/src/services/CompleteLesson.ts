@@ -1,4 +1,3 @@
-
 export interface CompletedLessonRepository {
   markAsCompleted(userId: number, lessonId: number): Promise<void>;
   hasCompleted(userId: number, lessonId: number): Promise<boolean>;

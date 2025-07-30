@@ -21,7 +21,6 @@ export function mockUserRepository(initialUsers: User[] = []): MockedUserReposit
       users.push(newUser);
       return { ...newUser };
     },
-    
     async findById(id: number): Promise<User | null> {
       const user = users.find((u) => u.id === id);
       return user ? { ...user } : null;

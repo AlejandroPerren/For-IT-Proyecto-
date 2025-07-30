@@ -1,18 +1,15 @@
-import { Outlet } from "react-router-dom"
-import Nav from "./compontents/main/Nav"
-import NavCourse from "./compontents/courses/NavCurse"
-
+import { Outlet } from "react-router-dom";
+import Nav from "./compontents/main/Nav";
+import NavCourse from "./compontents/courses/NavCurse";
 
 function App() {
-
-
   return (
     <div>
       <Nav></Nav>
-      <NavCourse/>
-      <Outlet/>
+      <NavCourse />
+      <Outlet />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

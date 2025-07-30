@@ -24,7 +24,7 @@ export async function CreateCourse(
   }
 
   const course: Course = {
-    id: 0, 
+    id: 0,
     title,
     description,
     createdBy,
