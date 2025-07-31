@@ -23,7 +23,7 @@ router.use("/section", sectionRoute);
 router.use("/lesson", lessonRoute);
 router.use("/enrollment", enrollmentRoute);
 router.use("/quiz", quizzesRoute);
-router.use("/anwser", anwserRoute);
+// router.use("/anwser", anwserRoute);
 
 // 404
 router.use((req, res) => {
