@@ -61,7 +61,7 @@ export function userController() {
     createUser: async (req: Request, res: Response) => {
       try {
         const userData = req.body;
-        const newUser = await service.create(userData);
+        const newUser = await service.createUser(userData);
         return res.status(201).json({ ok: true, data: newUser });
       } catch (error) {
         const err =

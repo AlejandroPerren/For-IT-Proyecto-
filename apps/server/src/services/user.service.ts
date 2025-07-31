@@ -33,7 +33,7 @@ export function userService(): UserRepository {
     },
 
 
-    create: async function (userData: User): Promise<User> {
+    createUser: async function (userData: User): Promise<User> {
       try {
         const newUser = await UserModel.create(userData);
         return _mapToUser(newUser);

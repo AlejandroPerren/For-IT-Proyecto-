@@ -4,7 +4,7 @@ const router = express.Router();
 
 import courseRoute from "./course.route";
 import userRoute from "./user.route";
-
+import sectionRoute from "./section.route";
 // Routes
 router.get("/", (req, res) => {
   res.json({
@@ -14,8 +14,8 @@ router.get("/", (req, res) => {
 });
 
 router.use("/users", userRoute);
-router.use("/course", courseRoute)
-
+router.use("/course", courseRoute);
+router.use("/section", sectionRoute);
 // 404
 router.use((req, res) => {
   res.status(404).json({
@@ -24,6 +24,4 @@ router.use((req, res) => {
   });
 });
 
-
-
-export default router
+export default router;
