@@ -14,7 +14,6 @@ export function userService(): UserRepository {
   };
 
   return {
-    // Buscar por ID
     findById: async function (id: number): Promise<User | null> {
       try {
         const user = await UserModel.findByPk(id);
@@ -24,7 +23,6 @@ export function userService(): UserRepository {
       }
     },
 
-    // Buscar por email
     findByEmail: async function (email: string): Promise<User | null> {
       try {
         const user = await UserModel.findOne({ where: { email } });
@@ -34,7 +32,7 @@ export function userService(): UserRepository {
       }
     },
 
-    // Crear usuario
+
     create: async function (userData: User): Promise<User> {
       try {
         const newUser = await UserModel.create(userData);

@@ -2,12 +2,12 @@ import path from "path";
 import dotenv from "dotenv";
 import morgan from "morgan";
 
+import router from "./src/routes"
+
 import express, { NextFunction, Request, Response } from "express";
 
 import { NODE_ENV, PORT } from "./env";
 import sequelizeConnection from "./src/database/connection";
-
-import userRoute from "./src/routes/user.router";
 
 dotenv.config({
   path: path.resolve(__dirname, "./environments/.env"),
@@ -20,23 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(morgan("dev"));
 
-// Routes
-app.get("/", (req, res) => {
-  res.json({
-    ok: true,
-    message: "API RESTful con TypeScript y Express",
-  });
-});
-
-app.use("/api/users", userRoute);
-
-// 404
-app.use((req, res) => {
-  res.status(404).json({
-    ok: false,
-    message: "Recurso no encontrado",
-  });
-});
+app.use("/api", router)
 
 // Error handling
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
