@@ -6,6 +6,7 @@ import courseRoute from "./course.route";
 import userRoute from "./user.route";
 import sectionRoute from "./section.route";
 import lessonRoute from "./lesson.route"
+import enrollmentRoute from "./enrollment.route"
 // Routes
 router.get("/", (req, res) => {
   res.json({
@@ -18,6 +19,7 @@ router.use("/users", userRoute);
 router.use("/course", courseRoute);
 router.use("/section", sectionRoute);
 router.use("/lesson", lessonRoute);
+router.use("/enrollment", enrollmentRoute);
 // 404
 router.use((req, res) => {
   res.status(404).json({
