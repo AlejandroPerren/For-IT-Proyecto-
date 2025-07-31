@@ -7,6 +7,8 @@ import express, { NextFunction, Request, Response } from "express";
 import { NODE_ENV, PORT } from "./env";
 import sequelizeConnection from "./src/database/connection";
 
+import userRoute from "./src/routes/user.router";
+
 dotenv.config({
   path: path.resolve(__dirname, "./environments/.env"),
 });
@@ -25,6 +27,8 @@ app.get("/", (req, res) => {
     message: "API RESTful con TypeScript y Express",
   });
 });
+
+app.use("/api/users", userRoute);
 
 // 404
 app.use((req, res) => {
@@ -56,9 +60,7 @@ sequelizeConnection
 try {
   app.listen(PORT, () => {
     console.log(
-      `Servidor corriendo en el puerto ${PORT} | MODO: ${
-        NODE_ENV ? NODE_ENV.toUpperCase() : "TEST (default)"
-      }`
+      `Servidor corriendo en el puerto ${PORT} | MODO: ${NODE_ENV.toUpperCase()}`
     );
   });
 } catch (error) {

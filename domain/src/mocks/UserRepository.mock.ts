@@ -26,15 +26,6 @@ export function mockUserRepository(initialUsers: User[] = []): MockedUserReposit
       return user ? { ...user } : null;
     },
 
-    async findAllPendingProfessors(): Promise<User[]> {
-      return users.filter((u) => u.role === "pending").map((u) => ({ ...u }));
-    },
 
-    async approveProfessor(id: number): Promise<void> {
-      const user = users.find((u) => u.id === id);
-      if (user) {
-        user.role = "professor";
-      }
-    },
   };
 }
