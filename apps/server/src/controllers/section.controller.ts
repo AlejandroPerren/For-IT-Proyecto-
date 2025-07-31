@@ -14,6 +14,10 @@ export function sectionController() {
         const { id } = req.params;
         const idCourse = Number(id);
         const section = await service.findByCourseId(idCourse);
+        return res.status(200).json({
+          ok: true,
+          data: section,
+        });
       } catch (e) {
         const error =
           createInternalServerError(
