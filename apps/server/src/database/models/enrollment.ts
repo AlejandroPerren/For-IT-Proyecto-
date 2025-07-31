@@ -1,24 +1,26 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import sequelize from '../../config/database';
-import User from './user';
-import Course from './course';
+import { DataTypes, Model, Optional } from "sequelize";
+import sequelize from "../../config/database";
+import User from "./user";
+import Course from "./course";
 
 interface EnrollmentAttributes {
   id: number;
   userId: number;
   courseId: number;
-  status: string;
+  status: "pending" | "approved";
   progress: number;
 }
 
-type EnrollmentCreationAttributes = Optional<EnrollmentAttributes, 'id'>;
+type EnrollmentCreationAttributes = Optional<EnrollmentAttributes, "id">;
 
-class Enrollment extends Model<EnrollmentAttributes, EnrollmentCreationAttributes>
-  implements EnrollmentAttributes {
+class Enrollment
+  extends Model<EnrollmentAttributes, EnrollmentCreationAttributes>
+  implements EnrollmentAttributes
+{
   public id!: number;
   public userId!: number;
   public courseId!: number;
-  public status!: string;
+  public status!: "pending" | "approved";
   public progress!: number;
 }
 
@@ -32,10 +34,9 @@ Enrollment.init(
   },
   {
     sequelize,
-    modelName: 'Enrollment',
-    tableName: 'Enrollments',
+    modelName: "Enrollment",
+    tableName: "Enrollments",
   }
 );
-
 
 export default Enrollment;

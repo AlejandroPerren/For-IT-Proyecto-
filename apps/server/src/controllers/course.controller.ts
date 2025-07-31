@@ -24,10 +24,11 @@ export function courseController() {
           data: course,
         });
       } catch (e) {
-        const error =
+        const err =
           createInternalServerError(
             "Ocurrio un error al encontrar el usuario"
           ) || e;
+        return res.status(500).json({ ok: false, message: err.message });
       }
     },
 

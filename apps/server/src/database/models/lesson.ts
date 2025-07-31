@@ -5,8 +5,8 @@ import Section from './section';
 interface LessonAttributes {
   id: number;
   title: string;
-  videoUrl: string;
-  textContent: string;
+  videoUrl: string | null;
+  textContent: string | null;
   sectionId: number;
   order: number;
 }

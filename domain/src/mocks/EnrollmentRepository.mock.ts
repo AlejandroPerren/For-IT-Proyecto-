@@ -14,7 +14,7 @@ export function mockEnrollmentRepository(enrollments: Enrollment[] = []): Mocked
       return match ? { ...match } : null;
     },
 
-    create: async (enrollment: Enrollment): Promise<Enrollment> => {
+    createEnrollment: async (enrollment: Enrollment): Promise<Enrollment> => {
       const newEnrollment = { ...enrollment, id: enrollments.length + 1 };
       enrollments.push(newEnrollment);
       return newEnrollment;

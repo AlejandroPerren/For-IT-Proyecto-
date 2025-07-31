@@ -27,5 +27,5 @@ export async function RequestAccessToCourse(
     progress: 0,
   };
 
-  return enrollmentRepo.create(enrollment);
+  return enrollmentRepo.createEnrollment(enrollment);
 }
