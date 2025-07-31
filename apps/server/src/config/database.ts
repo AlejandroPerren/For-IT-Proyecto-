@@ -1,16 +1,15 @@
 import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
 
-dotenv.config();
+import { DB_NAME, DB_USERNAME, DB_PASSWORD, DB_HOST, DB_PORT, DB_DIALECT } from '../database/env'; 
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME as string,
-  process.env.DB_USERNAME as string,
-  process.env.DB_PASSWORD as string,
+  DB_NAME,
+  DB_USERNAME,
+  DB_PASSWORD,
   {
-    host: process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    dialect: (process.env.DB_DIALECT as any) || 'mysql',
+    host: DB_HOST,
+    port: Number(DB_PORT),
+    dialect: DB_DIALECT as any,
     logging: false,
   }
 );

@@ -9,7 +9,7 @@ export function mockCourseRepository(courses: Course[] = []): MockedCourseReposi
   return {
     courses,
 
-    create: async (course: Course): Promise<Course> => {
+    createCourse: async (course: Course): Promise<Course> => {
       const newCourse = { ...course, id: courses.length + 1 };
       courses.push(newCourse);
       return newCourse;
@@ -19,18 +19,5 @@ export function mockCourseRepository(courses: Course[] = []): MockedCourseReposi
       const course = courses.find(c => c.id === id);
       return course ? { ...course } : null;
     },
-
-    findPublished: async (): Promise<Course[]> => {
-      return courses.filter(c => c.isPublished).map(c => ({ ...c }));
-    },
-
-    findByUserId: async (userId: number): Promise<Course[]> => {
-      return courses.filter(c => c.createdBy === userId).map(c => ({ ...c }));
-    },
-
-    publishCourse: async (id: number): Promise<void> => {
-      const course = courses.find(c => c.id === id);
-      if (course) course.isPublished = true;
-    },
-  };
+  }
 }

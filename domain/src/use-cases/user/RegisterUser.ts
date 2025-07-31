@@ -29,5 +29,5 @@ export async function RegisterUser(
     password: hashed,
   };
 
-  return userRepo.create(user);
+  return userRepo.createUser(user);
 }

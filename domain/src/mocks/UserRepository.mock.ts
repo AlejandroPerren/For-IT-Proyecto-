@@ -16,7 +16,7 @@ export function mockUserRepository(initialUsers: User[] = []): MockedUserReposit
       return user ? { ...user } : null;
     },
 
-    async create(user: User): Promise<User> {
+    async createUser(user: User): Promise<User> {
       const newUser = { ...user, id: users.length + 1 };
       users.push(newUser);
       return { ...newUser };

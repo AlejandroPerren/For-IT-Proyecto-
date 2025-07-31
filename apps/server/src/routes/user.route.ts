@@ -5,9 +5,9 @@ import { userController } from "../controllers/user.controller";
 const router = express.Router();
 const controller = userController();
 
-router.get("/users/:id", controller.getUserById);
-router.get("/users/email", controller.getUserByEmail); 
-router.post("/users", controller.createUser);
+router.get("/:id", controller.getUserById);
+router.get("/:email", controller.getUserByEmail); 
+router.post("/", controller.createUser);
 
 
 export default router;

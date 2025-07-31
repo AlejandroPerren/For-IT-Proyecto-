@@ -31,5 +31,5 @@ export async function CreateCourse(
     isPublished: false,
   };
 
-  return courseRepo.create(course);
+  return courseRepo.createCourse(course);
 }
