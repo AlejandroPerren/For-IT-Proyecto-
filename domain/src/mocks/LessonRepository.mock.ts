@@ -11,7 +11,7 @@ export function mockLessonRepository(
   return {
     lessons,
 
-    create: async (lesson: Lesson): Promise<Lesson> => {
+    createLesson: async (lesson: Lesson): Promise<Lesson> => {
       const newLesson = { ...lesson, id: lessons.length + 1 };
       lessons.push(newLesson);
       return newLesson;
@@ -20,12 +20,6 @@ export function mockLessonRepository(
     findBySectionId: async (sectionId: number): Promise<Lesson[]> => {
       return lessons
         .filter((l) => l.sectionId === sectionId)
-        .map((l) => ({ ...l }));
-    },
-
-    findByCourseId: async (courseId: number): Promise<Lesson[]> => {
-      return lessons
-        .filter((l) => (l as any).courseId === courseId)
         .map((l) => ({ ...l }));
     },
 

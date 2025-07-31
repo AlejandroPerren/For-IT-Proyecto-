@@ -23,7 +23,7 @@ export async function SubmitAnswer(
   const isCorrect = quiz.correctAnswer === selectedAnswer;
 
   const answer: Answer = {
-    id: 0, // se asignará en el repo
+    id: 0, 
     userId,
     quizId,
     selectedAnswer,
