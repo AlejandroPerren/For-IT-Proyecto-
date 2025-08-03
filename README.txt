@@ -98,8 +98,8 @@ Proyecto de backend para una plataforma de cursos tipo Udemy (sin pagos) con man
 
 * **Auth**
 
-  * `POST /auth/register`
-  * `POST /auth/login`
+  * `POST /users/register`
+  * `POST /users/login`
 
 * **Cursos y lecciones**
 
