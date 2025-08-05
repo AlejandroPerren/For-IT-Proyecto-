@@ -19,5 +19,9 @@ export function mockCourseRepository(courses: Course[] = []): MockedCourseReposi
       const course = courses.find(c => c.id === id);
       return course ? { ...course } : null;
     },
+
+    findAllCourses: async(): Promise<Course[] | null> =>{
+      return courses ? courses : null
+    }
   }
 }

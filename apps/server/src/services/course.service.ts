@@ -29,9 +29,16 @@ export function courseService(): CourseRepository {
         } catch (error) {
             throw error;
         }
-    }
+    },
 
-
+    findAllCourses: async function (): Promise<Course[] | null>{
+        try {
+          const courses = await CourseModel.findAll();
+          return courses ? courses.map(_mapToCourse) : null
+        } catch (error) {
+          throw error;
+        }
+    },
 
   };
 }

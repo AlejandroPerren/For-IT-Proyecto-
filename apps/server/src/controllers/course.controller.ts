@@ -7,7 +7,7 @@ import {
   createBadRequestError,
   createInternalServerError,
 } from "domain/src/errors/error";
-import { create } from "domain";
+
 
 export function courseController() {
   const service = courseService();
@@ -40,6 +40,17 @@ export function courseController() {
       } catch (error) {
         const err =
           createInternalServerError("Error al crear el Curso") || error;
+        return res.status(500).json({ ok: false, message: err.message });
+      }
+    },
+
+    findAllCourses: async (req: Request, res: Response) => {
+      try {
+        const corusesData = await service.findAllCourses();
+        return res.status(200).json({ ok: true, data: corusesData });
+      } catch (error) {
+        const err =
+          createInternalServerError("Error al buscar los Cursos") || error;
         return res.status(500).json({ ok: false, message: err.message });
       }
     },

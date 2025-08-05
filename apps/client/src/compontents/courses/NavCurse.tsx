@@ -2,10 +2,10 @@ import { navLinks } from "../../constants/navlinks";
 
 const NavCourse = () => {
   return (
-    <div className="fixed left-0 top-30 h-full w-[60%] sm:w-[40%] border-r-[1.5px]  flex flex-col justify-center-safe space-y-6 z-[1050] overflow-hidden">
+    <div className="h-full w-full flex flex-col justify-center space-y-6 p-6 overflow-y-auto">
       {navLinks.map((link) => (
         <a href={link.url} key={link.id}>
-          <p className="text-black w-fit font-semibold text-[20px] ml-12 border-b-[1.5px] pb-1 border-black sm:text-[30px]">
+          <p className="text-black font-semibold text-lg md:text-2xl border-b border-black pb-1">
             {link.label}
           </p>
         </a>

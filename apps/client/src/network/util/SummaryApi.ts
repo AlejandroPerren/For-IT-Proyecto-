@@ -16,6 +16,9 @@ const summaryApi = {
     Section: {
         url: `${backendDomain}section/`,
     },
+    Lesson: {
+        url: `${backendDomain}lesson/`,
+    },
 }
 
 

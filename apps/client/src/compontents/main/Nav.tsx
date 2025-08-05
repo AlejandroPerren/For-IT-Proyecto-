@@ -28,8 +28,8 @@ const Nav = () => {
     >
       <div className="flex items-center h-full justify-between w-[90%] xl:w-[80%] mx-auto">
         <div className="flex items-center space-x-2">
-          <div className="w-10 bg-rose-500 rounded-full flex items-center justify-center flex-col">
-            <h1 className="text-red-300">Hola</h1>
+          <div className="w-28 bg-rose-500 rounded-full flex items-center justify-center flex-col">
+            <h1 className="text-red-300">Cursos Ale</h1>
           </div>
         </div>
         <nav className="flex space-x-6 text-white font-semibold text-sm">
