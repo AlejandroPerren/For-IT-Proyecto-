@@ -1,6 +1,7 @@
 import { User as UserModel } from "../database/models";
 import { UserRepository } from "domain/src/services/UserRepository";
 import { User } from "domain/src/entities/User";
+import { hashPassword } from "src/utils/auth.util";
 
 export function userService(): UserRepository {
   const _mapToUser = (user: UserModel): User => {
@@ -32,15 +33,17 @@ export function userService(): UserRepository {
       }
     },
 
-
     createUser: async function (userData: User): Promise<User> {
       try {
-        const newUser = await UserModel.create(userData);
+        const hashedPassword = await hashPassword(userData.password);
+        const newUser = await UserModel.create({
+          ...userData,
+          password: hashedPassword,
+        });
         return _mapToUser(newUser);
       } catch (error) {
         throw error;
       }
     },
-
   };
 }
