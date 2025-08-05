@@ -1,8 +1,8 @@
-const backendDomain: string = import.meta.env.backendDomain || "http://localhost:8000/api/"
+const backendDomain: string = import.meta.env.backendDomain || "http://localhost:4000/api/"
 
 const summaryApi = {
     Users: {
-        url: `${backendDomain}users/register`
+        url: `${backendDomain}users/`
     },
     Courses: {
         url: `${backendDomain}course/`,
@@ -16,10 +16,6 @@ const summaryApi = {
     Section: {
         url: `${backendDomain}section/`,
     },
-
-
-
-
 }
 
 

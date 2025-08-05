@@ -1,11 +1,9 @@
 import path from "path";
 import dotenv from "dotenv";
 import morgan from "morgan";
-
-import router from "./src/routes"
-
+import cors from "cors";
+import router from "./src/routes";
 import express, { NextFunction, Request, Response } from "express";
-
 import { NODE_ENV, PORT } from "./env";
 import sequelizeConnection from "./src/database/connection";
 
@@ -13,14 +11,19 @@ dotenv.config({
   path: path.resolve(__dirname, "./environments/.env"),
 });
 
+const corsOptions = {
+  origin: "http://localhost:5173",
+  credentials: true,
+};
+
 const app = express();
 app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(morgan("dev"));
-
-app.use("/api", router)
+app.use(morgan("tiny"));
+app.use(cors(corsOptions));
+app.use("/api", router);
 
 // Error handling
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
