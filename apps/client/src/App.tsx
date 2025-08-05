@@ -1,13 +1,16 @@
 import { Outlet } from "react-router-dom";
 import Nav from "./compontents/main/Nav";
-import NavCourse from "./compontents/courses/NavCurse";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <div>
       <Nav></Nav>
-      <NavCourse />
-      <Outlet />
+      <main className="pt-[15vh] px-4">
+        <Outlet />
+      </main>
+      <ToastContainer />
     </div>
   );
 }
