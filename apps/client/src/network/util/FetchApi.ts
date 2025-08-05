@@ -13,6 +13,7 @@ export async function apiFetch<TResponse, TBody = unknown>(
   try {
     const res = await fetch(endpoint, {
       method: options.method || 'GET',
+      cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',
         ...(options.token ? { Authorization: `Bearer ${options.token}` } : {}),
