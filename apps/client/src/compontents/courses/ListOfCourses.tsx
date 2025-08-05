@@ -3,6 +3,7 @@ import { listOfCourses } from "../../network/fetch/Courses";
 import { toast } from "react-toastify";
 import type { Course } from "../../interface/course.interface";
 import { useNavigate } from "react-router-dom";
+import { loadFullCourseData } from "../../utils/LoadCourseData";
 
 const ListOfCourses = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -11,6 +12,7 @@ const ListOfCourses = () => {
 
   const goToCourse = (course: Course) => {
     localStorage.setItem("selectedCourse", JSON.stringify(course));
+    loadFullCourseData()
     navigate("/course");
   };
 
