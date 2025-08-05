@@ -2,13 +2,13 @@ export const navLinks = [
   {
     id: 1,
     url: "#",
-    label: "Home",
+    label: "Inicio",
     roles: ["user", "admin"],
   },
   {
     id: 2,
     url: "#",
-    label: "About",
+    label: "Mis Cursos",
     roles: ["user", "admin"],
   },
   {
@@ -26,13 +26,13 @@ export const navLinks = [
   {
     id: 5,
     url: "#",
-    label: "Dashboard",
+    label: "Mi Curso",
     roles: ["admin"],
   },
   {
     id: 6,
     url: "#",
-    label: "Contact",
+    label: "Ayuda",
     roles: ["user", "admin"],
   },
 ];
