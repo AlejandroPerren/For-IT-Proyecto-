@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { navLinks } from "../../constants/navlinks";
+import { useNavigate } from "react-router-dom";
+import { MdLogout } from "react-icons/md";
 
 const Nav = () => {
   const [navBg, setNavBg] = useState(true);
 
-  const userRole = "user";
+  const navigate = useNavigate();
+
+  const userRole = JSON.parse(localStorage.getItem("user") || "{}")?.role;
 
   useEffect(() => {
     const navBgHandler = () => {
@@ -19,6 +23,11 @@ const Nav = () => {
   const filteredLinks = navLinks.filter((link) =>
     link.roles.includes(userRole)
   );
+
+  const handleLogout = async () => {
+    localStorage.clear();
+    navigate("/auth");
+  };
 
   return (
     <div
@@ -42,9 +51,13 @@ const Nav = () => {
               {label}
             </a>
           ))}
+          {userRole !== null && (
+            <button onClick={handleLogout}>
+              <MdLogout />
+            </button>
+          )}
         </nav>
       </div>
-      
     </div>
   );
 };
