@@ -39,6 +39,7 @@ export function userService(): UserRepository {
         const newUser = await UserModel.create({
           ...userData,
           password: hashedPassword,
+          role: 'student', 
         });
         return _mapToUser(newUser);
       } catch (error) {

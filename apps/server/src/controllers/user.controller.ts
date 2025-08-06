@@ -60,8 +60,11 @@ export function userController() {
     createUser: async (req: Request, res: Response) => {
       try {
         const userData = req.body;
-        const newUser = await service.createUser(userData);
-        return res.status(201).json({ ok: true, data: newUser });
+        const user = await service.createUser(userData);
+
+        const token = generateToken(userData.id, userData.role);
+
+        return res.status(201).json({ ok: true, data: { user, token } });
       } catch (error) {
         const err =
           createInternalServerError("Error al crear usuario") || error;
