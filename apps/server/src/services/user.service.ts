@@ -1,7 +1,7 @@
 import { User as UserModel } from "../database/models";
 import { UserRepository } from "domain/src/services/UserRepository";
 import { User } from "domain/src/entities/User";
-import { hashPassword } from "src/utils/auth.util";
+import { hashPassword } from "../utils/auth.util";
 
 export function userService(): UserRepository {
   const _mapToUser = (user: UserModel): User => {

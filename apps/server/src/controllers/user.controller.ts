@@ -5,7 +5,7 @@ import {
   createInternalServerError,
 } from "domain/src/errors/error";
 import { User } from "domain/src/entities/User";
-import { comparePasswords, generateToken } from "src/utils/auth.util";
+import { comparePasswords, generateToken } from "../utils/auth.util";
 
 export function userController() {
   const service = userService();
