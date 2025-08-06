@@ -1,6 +1,6 @@
 import express from "express";
 import { quizController } from "../controllers/quiz.controller";
-import { authorizeAccessToCourse } from "src/middleware/auth.middleware";
+import { authorizeAccessToCourse } from "../middleware/auth.middleware";
 
 const router = express.Router();
 const controller = quizController();

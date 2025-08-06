@@ -3,12 +3,17 @@ import jwt from "jsonwebtoken";
 import { userService } from "../services/user.service";
 import { enrollmentService } from "../services/enrollment.service";
 import { Course as CourseModel } from "../database/models";
+import { User } from "domain/src/entities/User";
 
 const userRepo = userService();
 const enrollmentRepo = enrollmentService();
 
+interface RequestWithUser extends Request {
+  user?: User;
+}
+
 export async function authorizeAccessToCourse(
-  req: Request,
+  req: RequestWithUser,
   res: Response,
   next: NextFunction
 ) {
