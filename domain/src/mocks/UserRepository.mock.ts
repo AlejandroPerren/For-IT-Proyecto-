@@ -5,7 +5,9 @@ export interface MockedUserRepository extends UserRepository {
   users: User[];
 }
 
-export function mockUserRepository(initialUsers: User[] = []): MockedUserRepository {
+export function mockUserRepository(
+  initialUsers: User[] = []
+): MockedUserRepository {
   const users: User[] = [...initialUsers];
 
   return {
@@ -25,7 +27,27 @@ export function mockUserRepository(initialUsers: User[] = []): MockedUserReposit
       const user = users.find((u) => u.id === id);
       return user ? { ...user } : null;
     },
+    async findAllUser(): Promise<User[]> {
+      return users.map((u) => ({ ...u }));
+    },
 
+    async updateUser(
+      id: number,
+      updatedData: User
+    ): Promise<User> {
+      const index = users.findIndex((u) => u.id === id);
+      if (index === -1) return updatedData;
 
+      users[index] = { ...users[index], ...updatedData };
+      return { ...users[index] };
+    },
+
+    async deleteUser(id: number): Promise<boolean> {
+      const index = users.findIndex((u) => u.id === id);
+      if (index === -1) return false;
+
+      users.splice(index, 1);
+      return true;
+    },
   };
 }
