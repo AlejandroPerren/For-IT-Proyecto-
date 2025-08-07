@@ -4,7 +4,6 @@ import {
   createBadRequestError,
   createInternalServerError,
 } from "domain/src/errors/error";
-import { User } from "domain/src/entities/User";
 import { comparePasswords, generateToken } from "../utils/auth.util";
 
 export function userController() {
@@ -60,6 +59,12 @@ export function userController() {
     createUser: async (req: Request, res: Response) => {
       try {
         const userData = req.body;
+
+        const existingUser = await service.findByEmail(userData.email);
+        if (existingUser) {
+          const error = createBadRequestError("El email ya está registrado");
+          return res.status(400).json({ ok: false, message: error.message });
+        }
         const user = await service.createUser(userData);
 
         const token = generateToken(userData.id, userData.role);
@@ -133,6 +138,12 @@ export function userController() {
       try {
         const { id } = req.params;
         const updatedData = req.body;
+
+        const existingUser = await service.findByEmail(updatedData.email);
+        if (existingUser) {
+          const error = createBadRequestError("El email ya está registrado");
+          return res.status(400).json({ ok: false, message: error.message });
+        }
 
         const updatedUser = await service.updateUser(Number(id), updatedData);
         return res.status(200).json({ ok: true, data: updatedUser });
