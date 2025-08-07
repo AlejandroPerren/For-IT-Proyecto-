@@ -8,5 +8,6 @@ const controller = courseController();
 router.get("/:id",authorizeAccessToCourse, controller.findById);
 router.post("/", authorizeAccessToCourse,controller.createCourse)
 router.get("/", controller.findAllCourses)
+router.get("/createdBy/:id", controller.findCoursesByCreatorID)
 
 export default router

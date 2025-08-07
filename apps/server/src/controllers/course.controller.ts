@@ -8,14 +8,12 @@ import {
   createInternalServerError,
 } from "domain/src/errors/error";
 
-
 export function courseController() {
   const service = courseService();
 
   return {
     findById: async (req: Request, res: Response) => {
       try {
-        //TODO:MEjorar este metodo
         const { id } = req.params;
         const idCourse = Number(id);
         const course = await service.findById(idCourse);
@@ -47,6 +45,18 @@ export function courseController() {
     findAllCourses: async (req: Request, res: Response) => {
       try {
         const corusesData = await service.findAllCourses();
+        return res.status(200).json({ ok: true, data: corusesData });
+      } catch (error) {
+        const err =
+          createInternalServerError("Error al buscar los Cursos") || error;
+        return res.status(500).json({ ok: false, message: err.message });
+      }
+    },
+    findCoursesByCreatorID: async (req: Request, res: Response) => {
+      try {
+        const { id } = req.params;
+        const idCourse = Number(id);
+        const corusesData = await service.findCoursesByCreatorID(idCourse);
         return res.status(200).json({ ok: true, data: corusesData });
       } catch (error) {
         const err =
