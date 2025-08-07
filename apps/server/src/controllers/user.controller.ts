@@ -138,9 +138,11 @@ export function userController() {
       try {
         const { id } = req.params;
         const updatedData = req.body;
+        const userId = Number(id);
 
         const existingUser = await service.findByEmail(updatedData.email);
-        if (existingUser) {
+
+        if (existingUser && existingUser.id !== userId) {
           const error = createBadRequestError("El email ya está registrado");
           return res.status(400).json({ ok: false, message: error.message });
         }

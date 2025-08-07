@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 import type { TLogin } from "../../types/auth.types";
 import { Login } from "../../network/fetch/Auth";
 import { useNavigate } from "react-router-dom";
-import InputField from "./utils/input";
-import PasswordInput from "./utils/inputPassword";
+import InputField from "../ui/input";
+import PasswordInput from "../ui/inputPassword";
 
 const LoginForm = () => {
   const navigate = useNavigate();
@@ -56,7 +56,9 @@ const LoginForm = () => {
         <button
           className="w-full bg-rose-500 text-white p-2 rounded-md hover:bg-rose-600"
           type="submit"
-        >Ingresa</button>
+        >
+          Ingresa
+        </button>
       </form>
     </div>
   );

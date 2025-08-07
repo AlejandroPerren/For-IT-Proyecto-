@@ -1,5 +1,5 @@
 import type { User } from "../../interface/user.interface";
-import type { TUser } from "../../types/auth.types";
+import type { TUpdate } from "../../types/auth.types";
 import { apiFetch } from "../util/FetchApi";
 import summaryApi from "../util/SummaryApi";
 
@@ -34,18 +34,18 @@ export const userDataById = async (id: number) => {
   return response.data;
 };
 
-export const deleteUSer = async (id: number) => {
-  const response = await apiFetch<User[]>(`${summaryApi.Users.url}${id}`, {
+export const deleteUser = async (id: number) => {
+  const response = await apiFetch(`${summaryApi.Users.url}${id}`, {
     method: "DELETE",
     token: localStorage.getItem("token"),
   });
-  if (!response.ok || !response.data) {
+  if (!response.ok) {
     throw new Error(response.error ?? "Error al Borrar el Usuario");
   }
   return response.data;
 };
 
-export const updateUser = async (id: number, userData: TUser) => {
+export const updateUser = async (id: number, userData: TUpdate) => {
   const response = await apiFetch<User[]>(`${summaryApi.Users.url}${id}`, {
     method: "PUT",
     body: userData,

@@ -4,9 +4,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import type { TRegister } from "../../types/auth.types";
 import { useNavigate } from "react-router-dom";
-import InputField from "./utils/input";
-import PasswordInput from "./utils/inputPassword";
+import InputField from "../ui/input";
+
 import { SignUp } from "../../network/fetch/Auth";
+import PasswordInput from "../ui/inputPassword";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
