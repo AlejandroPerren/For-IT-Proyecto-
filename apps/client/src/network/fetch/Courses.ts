@@ -13,7 +13,9 @@ export const listOfCourses = async () => {
 };
 
 export const sectionOfCourse = async (courseId: number) => {
-  const response = await apiFetch<Section[]>(`${summaryApi.Section.url}${courseId}`);
+  const response = await apiFetch<Section[]>(`${summaryApi.Section.url}${courseId}`, {
+    token: localStorage.getItem("token"),
+  });
   if (!response.ok || !response.data) {
     throw new Error(response.error ?? "Error al obtener cursos");
   }
@@ -21,7 +23,9 @@ export const sectionOfCourse = async (courseId: number) => {
 };
 
 export const LessonOfSection = async (sectionId: number) => {
-  const response = await apiFetch<Lesson[]>(`${summaryApi.Lesson.url}section/${sectionId}`);
+  const response = await apiFetch<Lesson[]>(`${summaryApi.Lesson.url}section/${sectionId}`, {
+    token: localStorage.getItem("token"),
+  });
   if (!response.ok || !response.data) {
     throw new Error(response.error ?? "Error al obtener cursos");
   }
@@ -29,7 +33,9 @@ export const LessonOfSection = async (sectionId: number) => {
 };
 
 export const EnrollmentOfUser_Course = async (userId: number, courseId: number) => {
-  const response = await apiFetch<Section[]>(`${summaryApi.Enrollment.url}${userId}/${courseId}`);
+  const response = await apiFetch<Section[]>(`${summaryApi.Enrollment.url}${userId}/${courseId}`, {
+    token: localStorage.getItem("token"),
+  });
   if (!response.ok || !response.data) {
     throw new Error(response.error ?? "Error al obtener cursos");
   }
@@ -37,7 +43,9 @@ export const EnrollmentOfUser_Course = async (userId: number, courseId: number) 
 };
 
 export const QuizOfLesson = async (lessonId: number) => {
-  const response = await apiFetch<Section[]>(`${summaryApi.Section.url}lessons/${lessonId}`);
+  const response = await apiFetch<Section[]>(`${summaryApi.Section.url}lessons/${lessonId}`, {
+    token: localStorage.getItem("token"),
+  });
   if (!response.ok || !response.data) {
     throw new Error(response.error ?? "Error al obtener cursos");
   }

@@ -3,7 +3,7 @@ type FetchMethod = 'GET' | 'POST' | 'PUT' | 'DELETE';
 interface FetchOptions<TBody = unknown> {
   method?: FetchMethod;
   body?: TBody;
-  token?: string;
+  token?: string | null;
 }
 
 export async function apiFetch<TResponse, TBody = unknown>(
