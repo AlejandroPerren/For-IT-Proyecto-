@@ -4,6 +4,8 @@ import Home from "./pages/Home";
 import CoursePage from "./pages/Course";
 import Auth from "./pages/Auth";
 import Users from "./pages/Users";
+import MyCoursesPage from "./pages/MyCourses";
+import CreatorCourses from "./pages/CreatorCourses";
 
 export const router = createHashRouter([
   {
@@ -14,6 +16,8 @@ export const router = createHashRouter([
       { path: "/course", element: <CoursePage /> },
       { path: "/auth", element: <Auth /> },
       { path: "/usuarios", element: <Users /> },
+      { path: "/misCurso", element: <MyCoursesPage /> },
+      { path: "/crearCurso", element: <CreatorCourses /> },
     ],
   },
 ]);

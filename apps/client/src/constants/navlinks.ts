@@ -7,8 +7,8 @@ export const navLinks = [
   },
   {
     id: 2,
-    url: "/#/misCursos",
-    label: "Mis Cursos",
+    url: "/#/cursando",
+    label: "Cursando",
     roles: ["student", "admin","prof"],
   },
   {
@@ -25,7 +25,7 @@ export const navLinks = [
   },
   {
     id: 5,
-    url: "/#/miCurso",
+    url: "/#/misCurso",
     label: "Mi Curso",
     roles: ["admin", "prof"],
   },
