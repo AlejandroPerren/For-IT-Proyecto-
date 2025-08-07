@@ -39,9 +39,46 @@ export function userService(): UserRepository {
         const newUser = await UserModel.create({
           ...userData,
           password: hashedPassword,
-          role: 'student', 
+          role: "student",
         });
         return _mapToUser(newUser);
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    findAllUser: async function (): Promise<User[] | null> {
+      try {
+        const user = await UserModel.findAll();
+        return user ? user.map(_mapToUser) : null;
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    updateUser: async function (
+      id: number,
+      updatedData: Partial<User>
+    ): Promise<User> {
+      try {
+        const user = await UserModel.findByPk(id);
+        if (!user) throw new Error("User not found");
+
+        if (updatedData.password) {
+          updatedData.password = await hashPassword(updatedData.password);
+        }
+
+        await user.update(updatedData);
+        return _mapToUser(user);
+      } catch (error) {
+        throw error;
+      }
+    },
+
+    deleteUser: async function (id: number): Promise<boolean> {
+      try {
+        const deletedCount = await UserModel.destroy({ where: { id } });
+        return deletedCount > 0;
       } catch (error) {
         throw error;
       }

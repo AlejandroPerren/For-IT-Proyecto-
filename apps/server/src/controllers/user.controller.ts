@@ -117,5 +117,51 @@ export function userController() {
         return res.status(500).json({ ok: false, message: err.message });
       }
     },
+
+    findAllUser: async (req: Request, res: Response) => {
+      try {
+        const users = await service.findAllUser();
+        return res.status(200).json({ ok: true, data: users });
+      } catch (error) {
+        const err =
+          createInternalServerError("Error al obtener usuarios") || error;
+        return res.status(500).json({ ok: false, message: err.message });
+      }
+    },
+
+    updateUser: async (req: Request, res: Response) => {
+      try {
+        const { id } = req.params;
+        const updatedData = req.body;
+
+        const updatedUser = await service.updateUser(Number(id), updatedData);
+        return res.status(200).json({ ok: true, data: updatedUser });
+      } catch (error) {
+        const err =
+          createInternalServerError("Error al actualizar usuario") || error;
+        return res.status(500).json({ ok: false, message: err.message });
+      }
+    },
+
+    deleteUser: async (req: Request, res: Response) => {
+      try {
+        const { id } = req.params;
+
+        const deleted = await service.deleteUser(Number(id));
+        if (!deleted) {
+          return res
+            .status(404)
+            .json({ ok: false, message: "Usuario no encontrado" });
+        }
+
+        return res
+          .status(200)
+          .json({ ok: true, message: "Usuario eliminado correctamente" });
+      } catch (error) {
+        const err =
+          createInternalServerError("Error al eliminar usuario") || error;
+        return res.status(500).json({ ok: false, message: err.message });
+      }
+    },
   };
 }
