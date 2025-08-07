@@ -1,6 +1,6 @@
 import express from "express";
 import { answerController } from "../controllers/answer.controller";
-import { authorizeAccessToCourse } from "../middleware/auth.middleware";
+import { authorizeAccessToCourse } from "../middleware/accessCourse.middleware";
 
 const router = express.Router();
 const controller = answerController();

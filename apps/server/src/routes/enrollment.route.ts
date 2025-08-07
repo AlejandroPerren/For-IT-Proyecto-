@@ -1,6 +1,6 @@
     import { Router } from "express";
 import { enrollmentController } from "../controllers/enrollment.controller";
-import { authorizeAccessToCourse } from "../middleware/auth.middleware";
+import { authorizeAccessToCourse } from "../middleware/accessCourse.middleware";
 
 const controller = enrollmentController();
 const router = Router();

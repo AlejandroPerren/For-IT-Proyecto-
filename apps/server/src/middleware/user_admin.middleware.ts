@@ -5,12 +5,11 @@ import { User } from "domain/src/entities/User";
 
 const userRepo = userService();
 
-
 interface RequestWithUser extends Request {
   user?: User;
 }
 
-export function authorizeUserOrAdmin(
+export async function authorizeUserOrAdmin(
   req: RequestWithUser,
   res: Response,
   next: NextFunction
@@ -22,22 +21,24 @@ export function authorizeUserOrAdmin(
     }
 
     const token = authHeader.split(" ")[1];
+
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-    const userId = decoded.id;
+    const userId = decoded.userId;
 
-    userRepo.findById(userId).then((user) => {
-      if (!user) return res.status(401).json({ message: "User not found" });
+    const user = await userRepo.findById(userId);
 
-      req.user = user;
+    if (!user) return res.status(401).json({ message: "User not found" });
 
-      if (user.role === "admin") return next();
+    req.user = user;
 
-      const targetId = parseInt(req.params.id);
-      if (!isNaN(targetId) && user.id === targetId) return next();
+    if (user.role === "admin") return next();
 
-      return res.status(403).json({ message: "Access denied" });
-    });
+    const targetId = parseInt(req.params.id);
+    if (!isNaN(targetId) && user.id === targetId) return next();
+
+    return res.status(403).json({ message: "Access denied" });
   } catch (err) {
+    console.error("Error en authorizeUserOrAdmin:", err);
     return res.status(401).json({ message: "Unauthorized" });
   }
 }
