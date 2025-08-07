@@ -3,7 +3,7 @@ import App from "./App";
 import Home from "./pages/Home";
 import CoursePage from "./pages/Course";
 import Auth from "./pages/Auth";
-
+import Users from "./pages/Users";
 
 export const router = createHashRouter([
   {
@@ -12,7 +12,8 @@ export const router = createHashRouter([
     children: [
       { index: true, element: <Home /> },
       { path: "/course", element: <CoursePage /> },
-      { path: "/auth", element: <Auth/>}
+      { path: "/auth", element: <Auth /> },
+      { path: "/usuarios", element: <Users /> },
     ],
   },
 ]);

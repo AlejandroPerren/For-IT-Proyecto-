@@ -1,7 +1,11 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "clave_secreta";
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if(JWT_SECRET === undefined){
+  throw console.error("No existe key token");
+}
 
 export const hashPassword = async (plainPassword: string): Promise<string> => {
   const saltRounds = 10;

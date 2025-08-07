@@ -25,7 +25,7 @@ export async function authorizeAccessToCourse(
 
     const token = authHeader.split(" ")[1];
     const decoded: any = jwt.verify(token, process.env.JWT_SECRET!);
-    const userId = decoded.id;
+    const userId = decoded.userId;
 
     const user = await userRepo.findById(userId);
     if (!user) return res.status(401).json({ message: "User not found" });

@@ -1,24 +1,27 @@
 import { useState } from "react";
 import type { FieldError, UseFormRegisterReturn } from "react-hook-form";
 import { Error } from "./ErrorMessage";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-interface PasswordInputProps {
+type Option = {
+  label: string;
+  value: string;
+};
+
+interface SelectFieldProps {
   label: string;
   id: string;
-  placeholder: string;
+  options: Option[];
   register: UseFormRegisterReturn;
   error?: FieldError;
 }
 
-const PasswordInput = ({
+const SelectField = ({
   label,
   id,
-  placeholder,
+  options,
   register,
   error,
-}: PasswordInputProps) => {
-  const [showPassword, setShowPassword] = useState(false);
+}: SelectFieldProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
@@ -30,26 +33,23 @@ const PasswordInput = ({
       >
         {label}
       </label>
-      <input
+      <select
         id={id}
-        type={showPassword ? "text" : "password"}
         {...register}
-        placeholder={isFocused ? placeholder : ""}
         onFocus={() => setIsFocused(true)}
         onBlur={(e) => setIsFocused(!!e.target.value)}
-        className="w-full border border-gray-300 rounded-md p-2 pr-10 focus:border-blue-500 focus:ring-blue-500"
-      />
-      <button
-        type="button"
-        onClick={() => setShowPassword(!showPassword)}
-        className="absolute right-3 top-2 text-gray-500 hover:text-black focus:outline-none"
-        tabIndex={-1} 
+        className="w-full border border-gray-300 rounded-md p-2 bg-white focus:border-blue-500 focus:ring-blue-500"
       >
-        {showPassword ? <FaEyeSlash /> : <FaEye />}
-      </button>
+        <option value="">Seleccionar rol</option>
+        {options.map(({ label, value }) => (
+          <option key={value} value={value}>
+            {label}
+          </option>
+        ))}
+      </select>
       {error && <Error>{error.message}</Error>}
     </div>
   );
 };
 
-export default PasswordInput;
+export default SelectField;
