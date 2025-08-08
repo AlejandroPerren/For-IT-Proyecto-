@@ -32,9 +32,11 @@ export function courseController() {
         const newCourse = await service.createCourse(courseData);
         return res.status(201).json({ ok: true, data: newCourse });
       } catch (error) {
+           console.log(error)
         const err =
           createInternalServerError("Error al crear el Curso") || error;
         return res.status(500).json({ ok: false, message: err.message });
+           
       }
     },
 

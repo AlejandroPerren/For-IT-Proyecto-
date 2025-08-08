@@ -4,6 +4,11 @@ import type { TQuiz } from "../../types/courses.types";
 import { quizSchema } from "../../schemas/Course.schema";
 import { saveToStorage } from "../../utils/localStorageHelper";
 import InputField from "../ui/input";
+import {
+  clearCourseCreatorStorage,
+  createFullCourseFlow,
+} from "../../utils/CourseCreatorHelper";
+import { toast } from "react-toastify";
 
 type Props = {
   onBack?: () => void;
@@ -11,16 +16,11 @@ type Props = {
 
 const FormQuiz = ({ onBack }: Props) => {
   const stored = localStorage.getItem("quiz");
-  const defaultValues = stored
+  const defaultValues: TQuiz = stored
     ? JSON.parse(stored)
     : {
         question: "",
-        options: {
-          A: "",
-          B: "",
-          C: "",
-          D: "",
-        },
+        options: { A: "", B: "", C: "", D: "" },
         correctAnswer: "A",
       };
 
@@ -33,8 +33,17 @@ const FormQuiz = ({ onBack }: Props) => {
     defaultValues,
   });
 
-  const onSubmit = (data: TQuiz) => {
+  const onSubmit = async (data: TQuiz) => {
     saveToStorage("quiz", data);
+    try {
+      await createFullCourseFlow();
+      toast.success("Se creo tu curso correctamente");
+    } catch (error) {
+      toast.error("Ocurrio un error al Crear el Curso");
+      console.log(error);
+    } finally {
+      await clearCourseCreatorStorage();
+    }
   };
 
   return (
@@ -81,22 +90,28 @@ const FormQuiz = ({ onBack }: Props) => {
       <InputField
         label="correctAnswer"
         id="correctAnswer"
-        placeholder="Ingrese la opcion Correcta"
+        placeholder="Ingrese la opción correcta"
         register={register("correctAnswer")}
         error={errors.correctAnswer}
       />
 
-      {onBack && (
-        <button type="button" onClick={onBack}>
-          Volver
+      <div className="flex justify-between">
+        {onBack && (
+          <button
+            type="button"
+            onClick={onBack}
+            className="bg-gray-300 px-4 py-2 rounded"
+          >
+            Volver
+          </button>
+        )}
+        <button
+          type="submit"
+          className="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Finalizar
         </button>
-      )}
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Siguiente
-      </button>
+      </div>
     </form>
   );
 };

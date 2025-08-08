@@ -1,9 +1,7 @@
-import {
-  sectionOfCourse,
-  LessonOfSection,
-  EnrollmentOfUser_Course,
-  QuizOfLesson,
-} from "../network/fetch/Courses";
+import { EnrollmentOfUser_Course } from "../network/fetch/Enrollment";
+import { LessonOfSection } from "../network/fetch/Lesson";
+import { QuizOfLesson } from "../network/fetch/Quiz";
+import { sectionOfCourse } from "../network/fetch/Section";
 
 export const loadFullCourseData = async () => {
   const rawCourse = localStorage.getItem("selectedCourse");
@@ -13,12 +11,10 @@ export const loadFullCourseData = async () => {
 
   const course = JSON.parse(rawCourse);
   const courseId = course.id;
-  const userId = 2; 
-
+  const userId = 2;
 
   const sections = await sectionOfCourse(courseId);
   localStorage.setItem("sections", JSON.stringify(sections));
-
 
   const allLessons = await Promise.all(
     sections.map((section) => LessonOfSection(section.id))

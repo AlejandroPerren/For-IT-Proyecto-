@@ -12,7 +12,7 @@ type Props = {
 
 const FormCourse = ({ onNext }: Props) => {
   const stored = localStorage.getItem("course");
-  const defaultValues = stored
+  const defaultValues: TCourse = stored
     ? JSON.parse(stored)
     : { title: "", description: "", isPublished: false };
 
@@ -26,45 +26,44 @@ const FormCourse = ({ onNext }: Props) => {
   });
 
   const onSubmit = (data: TCourse) => {
-    saveToStorage("course", data);
-    onNext();
+    saveToStorage("course", data); 
+    onNext(); 
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <InputField
-          label="title"
-          id="title"
-          placeholder="Ingrese el Titulo"
-          register={register("title")}
-          error={errors.title}
-        />
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <InputField
+        label="title"
+        id="title"
+        placeholder="Ingrese el título"
+        register={register("title")}
+        error={errors.title}
+      />
 
-        <InputField
-          label="description"
-          id="description"
-          placeholder="Ingrese la descripcion"
-          register={register("description")}
-          error={errors.description}
-        />
+      <InputField
+        label="description"
+        id="description"
+        placeholder="Ingrese la descripción"
+        register={register("description")}
+        error={errors.description}
+      />
 
-        <div className="flex items-center gap-2 mb-4">
-          <input
-            type="checkbox"
-            id="isPublished"
-            {...register("isPublished")}
-          />
-          <label htmlFor="isPublished">¿Publicar?</label>
-        </div>
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Siguiente
-        </button>
-      </form>
-    </div>
+      <div className="flex items-center gap-2 mb-4">
+        <input
+          type="checkbox"
+          id="isPublished"
+          {...register("isPublished")}
+        />
+        <label htmlFor="isPublished">¿Publicar?</label>
+      </div>
+
+      <button
+        type="submit"
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+      >
+        Siguiente
+      </button>
+    </form>
   );
 };
 

@@ -12,17 +12,8 @@ type Props = {
 };
 
 const FormSection = ({ onNext, onBack }: Props) => {
-  const onSubmit = (data: TSection) => {
-    saveToStorage("section", data);
-    onNext();
-  };
-
   const stored = localStorage.getItem("section");
-  const defaultValues = stored
-    ? JSON.parse(stored)
-    : {
-        title: "",
-      };
+  const defaultValues: TSection = stored ? JSON.parse(stored) : { title: "" };
 
   const {
     register,
@@ -33,19 +24,28 @@ const FormSection = ({ onNext, onBack }: Props) => {
     defaultValues,
   });
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        <InputField
-          label="title"
-          id="title"
-          placeholder="Ingrese el Titulo"
-          register={register("title")}
-          error={errors.title}
-        />
+  const onSubmit = (data: TSection) => {
+    saveToStorage("section", data);
+    onNext();
+  };
 
+  return (
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <InputField
+        label="title"
+        id="title"
+        placeholder="Ingrese el Titulo"
+        register={register("title")}
+        error={errors.title}
+      />
+
+      <div className="flex justify-between">
         {onBack && (
-          <button type="button" onClick={onBack}>
+          <button
+            type="button"
+            onClick={onBack}
+            className="bg-gray-300 px-4 py-2 rounded"
+          >
             Volver
           </button>
         )}
@@ -55,8 +55,8 @@ const FormSection = ({ onNext, onBack }: Props) => {
         >
           Siguiente
         </button>
-      </form>
-    </div>
+      </div>
+    </form>
   );
 };
 

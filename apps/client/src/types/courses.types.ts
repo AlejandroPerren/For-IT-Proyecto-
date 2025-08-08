@@ -1,10 +1,10 @@
 import type { Course } from "../interface/course.interface";
 import type { Section } from "../interface/section.interface";
 
-export type TCourse = Omit<Course, "id">;
+export type TCourse = Omit<Course, "id" | "createdBy" | "isEnrolled">;
 
 
-export type TSection = Omit<Section, "id" | "courseId" >;
+export type TSection = Omit<Section, "id" | "courseId">;
 
 export type TLesson = {
   title: string;

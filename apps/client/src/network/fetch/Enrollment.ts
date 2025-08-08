@@ -1,4 +1,5 @@
 import type { Enrollment } from "../../interface/enrollment.interface";
+import type { Section } from "../../interface/section.interface";
 import { apiFetch } from "../util/FetchApi";
 import summaryApi from "../util/SummaryApi";
 
@@ -15,7 +16,7 @@ export const createEnrollment = async (userId: number, courseId: number) => {
     },
   });
   if (!response.ok || !response.data) {
-    throw new Error(response.error ?? "Error al obtener cursos");
+    throw new Error(response.error ?? "Error al Crear el cursos");
   }
   return response.data;
 };
@@ -40,6 +41,17 @@ export const approveEnrollment = async (userId: number, courseId: number) => {
   );
   if (!response.ok) {
     throw new Error(response.error ?? "Error al aprobar inscripción");
+  }
+  return response.data;
+};
+
+
+export const EnrollmentOfUser_Course = async (userId: number, courseId: number) => {
+  const response = await apiFetch<Section[]>(`${summaryApi.Enrollment.url}${userId}/${courseId}`, {
+    token: localStorage.getItem("token"),
+  });
+  if (!response.ok || !response.data) {
+    throw new Error(response.error ?? "Error al obtener cursos");
   }
   return response.data;
 };
