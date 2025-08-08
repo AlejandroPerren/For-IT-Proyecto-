@@ -4,4 +4,5 @@ export interface Course {
   description: string;
   createdBy: number;
   isPublished: boolean;
+  isEnrolled: boolean;
 }

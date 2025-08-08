@@ -10,6 +10,6 @@ router.get("/:userId/:courseId",authorizeAccessToCourse, controller.findByUserAn
 router.put("/:userId/:courseId/approve",authorizeAccessToCourse, controller.approve);
 router.put("/:userId/:courseId/progress",authorizeAccessToCourse, controller.updateProgress);
 router.get("/:userId/:courseId/progress",authorizeAccessToCourse, controller.getProgress);
-router.get("/course/:courseId",authorizeAccessToCourse, controller.findEnrolledUsers);
+router.get("/course/users/:courseId", controller.findEnrolledUsers);
 
 export default router;
