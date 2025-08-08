@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loginSchema } from "../../schemas/Auth.schema";
+
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import type { TLogin } from "../../types/auth.types";
@@ -7,6 +7,7 @@ import { Login } from "../../network/fetch/Auth";
 import { useNavigate } from "react-router-dom";
 import InputField from "../ui/input";
 import PasswordInput from "../ui/inputPassword";
+import { loginSchema } from "../../schemas/Auth.schema";
 
 const LoginForm = () => {
   const navigate = useNavigate();

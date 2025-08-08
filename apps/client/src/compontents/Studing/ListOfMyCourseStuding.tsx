@@ -1,15 +1,11 @@
 import { useEffect, useState } from "react";
-import {
-  listOfCourses,
-  listOfCoursesWhitIdUser,
-} from "../../network/fetch/Courses";
+import { listOfCoursesWhitIdUser } from "../../network/fetch/Courses";
 import { toast } from "react-toastify";
 import type { Course } from "../../interface/course.interface";
 import { useNavigate } from "react-router-dom";
 import { loadFullCourseData } from "../../utils/LoadCourseData";
-import { createEnrollment } from "../../network/fetch/Enrollment";
 
-const ListOfCourses = () => {
+const ListOfMyCourseStuding = () => {
   const [courses, setCourses] = useState<Course[]>([]);
 
   const navigate = useNavigate();
@@ -20,37 +16,17 @@ const ListOfCourses = () => {
     navigate("/course");
   };
 
-  const handleSubscribe = async (idCourse: number) => {
-    const userString = localStorage.getItem("user");
-    if (!userString) {
-      console.log("falta ID");
-      return;
-    }
-    try {
-      const { id } = JSON.parse(userString);
-      await createEnrollment(id, idCourse);
-      toast.success("inscripcion Enviada", {
-        position: "top-right",
-      });
-    } catch (error) {
-      console.log(error);
-      toast.error("Algo Salio Mal", {
-        position: "top-right",
-      });
-    }
-  };
-
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const userString = localStorage.getItem("user");
-        if (!userString) {
-          const data = await listOfCourses();
-          setCourses(data);
-        } else {
+        if (userString) {
           const { id } = JSON.parse(userString);
           const data = await listOfCoursesWhitIdUser(id);
-          setCourses(data);
+          const enrolledCourses = data.filter(
+            (course: Course) => course.isEnrolled
+          );
+          setCourses(enrolledCourses);
         }
       } catch (error) {
         console.log(error);
@@ -77,21 +53,12 @@ const ListOfCourses = () => {
             Creado por: {course.createdBy}
           </span>
           <div>
-            {course.isEnrolled ? (
-              <button
-                onClick={() => goToCourse(course)}
-                className="bg-gray-500 cursor-pointer mt-2 shadow-2xl text-white border-2 rounded-2xl p-2"
-              >
-                ir Al curso
-              </button>
-            ) : (
-              <button
-                onClick={() => handleSubscribe(course.id)}
-                className="bg-rose-500 cursor-pointer hover:bg-red-800  mt-2 shadow-2xl text-white border-2 rounded-2xl p-2"
-              >
-                Inscribirme
-              </button>
-            )}
+            <button
+              onClick={() => goToCourse(course)}
+              className="bg-gray-500 cursor-pointer mt-2 shadow-2xl text-white border-2 rounded-2xl p-2"
+            >
+              ir Al curso
+            </button>
           </div>
         </div>
       ))}
@@ -99,4 +66,4 @@ const ListOfCourses = () => {
   );
 };
 
-export default ListOfCourses;
+export default ListOfMyCourseStuding;

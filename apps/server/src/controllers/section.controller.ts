@@ -36,6 +36,7 @@ export function sectionController() {
         const newSection = await service.createSection(sectionData);
         return res.status(200).json({ ok: true, data: newSection });
       } catch (error) {
+          console.log(error)
         const err =
           createInternalServerError("Error al crear usuario") || error;
         return res.status(500).json({ ok: false, message: err.message });

@@ -33,6 +33,7 @@ export function lessonController() {
         const newLesson = await service.createLesson(lessonData);
         return res.status(200).json({ ok: true, data: newLesson });
       } catch (e) {
+          console.log(e)
         const err =
           createInternalServerError("Ocurrio un error al crear la leccion") ||
           e;

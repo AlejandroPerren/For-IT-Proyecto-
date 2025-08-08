@@ -1,9 +1,11 @@
 import { Request, Response } from "express";
 import { enrollmentService } from "../services/enrollment.service";
 import { createInternalServerError } from "domain/src/errors/error";
+import { userService } from "../services/user.service";
 
 export function enrollmentController() {
   const service = enrollmentService();
+  const usersService = userService();
 
   return {
     createEnrollment: async (req: Request, res: Response) => {
@@ -84,7 +86,17 @@ export function enrollmentController() {
         const courseId = Number(req.params.courseId);
 
         const enrollments = await service.findEnrolledUsers(courseId);
-        return res.status(200).json({ ok: true, data: enrollments });
+        const enrollmentsWithEmail = await Promise.all(
+          enrollments.map(async (enrollment) => {
+            const user = await usersService.findById(enrollment.userId);
+            return {
+              ...enrollment,
+              email: user?.email || null,
+            };
+          })
+        );
+
+        return res.status(200).json({ ok: true, data: enrollmentsWithEmail });
       } catch (error) {
         const err =
           createInternalServerError("Error al listar usuarios inscritos") ||

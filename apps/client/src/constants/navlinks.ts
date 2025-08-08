@@ -3,19 +3,19 @@ export const navLinks = [
     id: 1,
     url: "/",
     label: "Inicio",
-    roles: ["student", "admin"],
+    roles: ["student", "admin","prof"],
   },
   {
     id: 2,
-    url: "/#/misCursos",
-    label: "Mis Cursos",
-    roles: ["student", "admin"],
+    url: "/#/cursando",
+    label: "Cursando",
+    roles: ["student", "admin","prof"],
   },
   {
     id: 3,
     url: "/#/cuenta",
     label: "Mi Cuenta",
-    roles: ["student"],
+    roles: ["student","prof"],
   },
   {
     id: 4,
@@ -25,7 +25,7 @@ export const navLinks = [
   },
   {
     id: 5,
-    url: "/#/miCurso",
+    url: "/#/misCurso",
     label: "Mi Curso",
     roles: ["admin", "prof"],
   },
@@ -33,6 +33,6 @@ export const navLinks = [
     id: 6,
     url: "/#/ayuda",
     label: "Ayuda",
-    roles: ["student", "admin"],
+    roles: ["student", "admin","prof"],
   },
 ];

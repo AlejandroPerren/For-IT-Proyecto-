@@ -22,23 +22,37 @@ export function courseService(): CourseRepository {
       }
     },
 
-    createCourse: async function (courseData: Course): Promise<Course>{
-        try {
-            const newCourse = await CourseModel.create(courseData);
-            return _mapToCourse(newCourse)
-        } catch (error) {
-            throw error;
-        }
+    createCourse: async function (courseData: Course): Promise<Course> {
+      try {
+        const newCourse = await CourseModel.create(courseData);
+        return _mapToCourse(newCourse);
+      } catch (error) {
+        throw error;
+      }
     },
 
-    findAllCourses: async function (): Promise<Course[] | null>{
-        try {
-          const courses = await CourseModel.findAll();
-          return courses ? courses.map(_mapToCourse) : null
-        } catch (error) {
-          throw error;
-        }
+    findAllCourses: async function (): Promise<Course[] | null> {
+      try {
+        const courses = await CourseModel.findAll();
+        return courses ? courses.map(_mapToCourse) : null;
+      } catch (error) {
+        throw error;
+      }
     },
 
+    findCoursesByCreatorID: async function (
+      profId: number
+    ): Promise<Course[] | null> {
+      try {
+        const courses = await CourseModel.findAll({
+          where: {
+            createdBy: profId,
+          },
+        });
+        return courses ? courses.map(_mapToCourse) : null;
+      } catch (error) {
+        throw error;
+      }
+    },
   };
 }

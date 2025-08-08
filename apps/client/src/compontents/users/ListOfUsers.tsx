@@ -53,6 +53,15 @@ const ListOfUsers = () => {
       console.log(error);
     }
   };
+  const roleLabels: {
+    admin: string;
+    student: string;
+    prof: string;
+  } = {
+    admin: "ADMIN",
+    student: "ESTUDIANTE",
+    prof: "PROFESOR",
+  };
 
   return (
     <>
@@ -63,7 +72,10 @@ const ListOfUsers = () => {
             <p className="text-sm text-gray-600">{user.name}</p>
             <div className="flex justify-between items-center">
               <h2>
-                Role: <span>{user.role}</span>
+                <span>
+                  {roleLabels[user.role as keyof typeof roleLabels] ||
+                    "Rol desconocido"}
+                </span>
               </h2>
               <div className="flex gap-3 mt-2">
                 <button
