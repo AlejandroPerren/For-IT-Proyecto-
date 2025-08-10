@@ -1,6 +1,6 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import InputField from "../ui/input";
+import {InputField} from "../ui/inputField";
 import type { TLesson } from "../../types/courses.types";
 import { lessonSchema } from "../../schemas/Course.schema";
 import { saveToStorage } from "../../utils/localStorageHelper";

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 
 import { courseSchema } from "../../schemas/Course.schema";
 import type { TCourse } from "../../types/courses.types";
-import InputField from "../ui/input";
+import {InputField} from "../ui/inputField";
 import { saveToStorage } from "../../utils/localStorageHelper";
 
 type Props = {
