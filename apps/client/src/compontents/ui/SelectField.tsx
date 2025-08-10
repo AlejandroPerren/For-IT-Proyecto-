@@ -15,7 +15,7 @@ interface SelectFieldProps {
   error?: FieldError;
 }
 
-const SelectField = ({
+export const SelectField = ({
   label,
   id,
   options,
@@ -52,4 +52,4 @@ const SelectField = ({
   );
 };
 
-export default SelectField;
+

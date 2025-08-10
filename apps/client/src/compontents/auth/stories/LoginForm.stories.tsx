@@ -23,10 +23,8 @@ const meta: Meta<typeof LoginForm> = {
 export default meta;
 type Story = StoryObj<typeof LoginForm>;
 
-// Historia por defecto
 export const Default: Story = {};
 
-// Historia con interacción
 export const FilledForm: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);

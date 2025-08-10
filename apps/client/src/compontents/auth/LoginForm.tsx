@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 import type { TLogin } from "../../types/auth.types";
 import { Login } from "../../network/fetch/Auth";
 import { useNavigate } from "react-router-dom";
-import InputField from "../ui/input";
-import PasswordInput from "../ui/inputPassword";
+import {InputField} from "../ui/inputField";
+import {PasswordInput} from "../ui/inputPassword";
 import { loginSchema } from "../../schemas/Auth.schema";
 
 const LoginForm = () => {

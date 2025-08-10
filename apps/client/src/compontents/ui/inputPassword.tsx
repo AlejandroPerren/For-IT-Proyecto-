@@ -12,7 +12,7 @@ interface PasswordInputProps {
   error?: FieldError;
 }
 
-const PasswordInput = ({
+export const PasswordInput = ({
   label,
   id,
   placeholder,
@@ -53,4 +53,3 @@ const PasswordInput = ({
   );
 };
 
-export default PasswordInput;

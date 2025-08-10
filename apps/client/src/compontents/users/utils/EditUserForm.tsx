@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { updateSchema } from "../../../schemas/Auth.schema";
-import InputField from "../../ui/input";
+import InputField from "../../ui/inputField";
 import type { User } from "../../../interface/user.interface";
 import type { TUpdate } from "../../../types/auth.types";
 import { useEffect } from "react";

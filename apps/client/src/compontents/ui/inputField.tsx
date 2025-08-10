@@ -11,7 +11,7 @@ interface InputFieldProps {
   error?: FieldError;
 }
 
-const InputField = ({
+export const InputField = ({
   label,
   id,
   type = "text",
@@ -44,4 +44,4 @@ const InputField = ({
   );
 };
 
-export default InputField;
+
