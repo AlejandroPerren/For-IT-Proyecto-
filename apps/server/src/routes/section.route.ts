@@ -6,7 +6,7 @@ import { authorizeCourseAccess } from "../middleware/authorizeCourseCreation.mid
 const router = express.Router()
 const controller = sectionController()
 
-router.get("/:id",authorizeAccessToCourse, controller.findByCourseId);
+router.get("/:courseId",authorizeAccessToCourse, controller.findByCourseId);
 router.post("/",authorizeCourseAccess, controller.createSection)
 
 export default router

@@ -1,13 +1,13 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { updateSchema } from "../../../schemas/Auth.schema";
-import InputField from "../../ui/inputField";
+import {InputField} from "../../ui/inputField";
 import type { User } from "../../../interface/user.interface";
 import type { TUpdate } from "../../../types/auth.types";
 import { useEffect } from "react";
 import { updateUser } from "../../../network/fetch/Users";
 import { toast } from "react-toastify";
-import SelectField from "../../ui/SelectField";
+import {SelectField} from "../../ui/SelectField";
 
 type Props = {
   user: User;
