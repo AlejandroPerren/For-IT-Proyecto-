@@ -12,7 +12,13 @@ services:
       - ./apps/server/src/environments/.env.development
     environment:
       NODE_ENV: development
-
+    deploy:
+      resources:
+        limits:
+          memory: 4G  
+        reservations:
+          memory: 2G
+          
   frontend:
     build: ./apps/client
     container_name: frontend_service
