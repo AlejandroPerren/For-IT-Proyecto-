@@ -47,10 +47,7 @@ export async function authorizeAccessToCourse(
       return next();
     }
 
-    const enrollment = await enrollmentRepo.findByUserAndCourse(
-      user.id,
-      courseId
-    );
+    const enrollment = await enrollmentRepo.findByUserAndCourse(user.id, courseId);
     if (enrollment && enrollment.status === "approved") {
       req.user = user;
       return next();
