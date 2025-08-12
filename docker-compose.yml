@@ -5,15 +5,13 @@ services:
     ports:
       - "4000:4000"
     volumes:
-      - ./apps/server:/app
+      - ./apps/server:/app/apps/server
       - ./domain:/app/domain
       - /app/node_modules
     env_file:
-      - ./apps/server/environments/.env.development
+      - ./apps/server/src/environments/.env.development
     environment:
       NODE_ENV: development
-    depends_on:
-      - db
 
   frontend:
     build: ./apps/client
@@ -21,24 +19,8 @@ services:
     ports:
       - "5173:5173"
     volumes:
-      - ./apps/client:/app
+      - ./apps/client:/app/apps/client
       - ./domain:/app/domain
       - /app/node_modules
     depends_on:
       - backend
-
-  db:
-    image: mysql:8
-    container_name: mysql_db
-    environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: forit
-      MYSQL_USER: user
-      MYSQL_PASSWORD: pass
-    ports:
-      - "3306:3306"
-    volumes:
-      - mysql_data:/var/lib/mysql
-
-volumes:
-  mysql_data:
