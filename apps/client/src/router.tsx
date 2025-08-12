@@ -7,6 +7,8 @@ import Users from "./pages/Users";
 import MyCoursesPage from "./pages/MyCourses";
 import CreatorCourses from "./pages/CreatorCourses";
 import Studying from "./pages/Studying";
+import MyAccount from "./pages/MyAccount";
+import Help from "./pages/Help";
 
 export const router = createHashRouter([
   {
@@ -20,6 +22,8 @@ export const router = createHashRouter([
       { path: "/misCurso", element: <MyCoursesPage /> },
       { path: "/crearCurso", element: <CreatorCourses /> },
       { path: "/cursando", element: <Studying /> },
+      {path: "/cuenta", element: <MyAccount/>},
+      {path: "/ayuda", element: <Help/>}
     ],
   },
 ]);
