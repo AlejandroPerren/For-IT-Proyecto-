@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import type { Section } from "../../interface/section.interface";
 import type { Lesson } from "../../interface/lesson.interface";
 
-
 type NavCourseProps = {
   onSelectLesson: (lesson: Lesson) => void;
 };
@@ -19,6 +18,11 @@ const NavCourse: React.FC<NavCourseProps> = ({ onSelectLesson }) => {
 
   const toggleSection = (id: number) => {
     setOpenSectionId(openSectionId === id ? null : id);
+  };
+
+  const handleLessonClick = (lesson: Lesson) => {
+    localStorage.setItem("lessonSelected", JSON.stringify(lesson));
+    onSelectLesson(lesson);
   };
 
   return (
@@ -39,7 +43,7 @@ const NavCourse: React.FC<NavCourseProps> = ({ onSelectLesson }) => {
                 .map((lesson) => (
                   <li key={lesson.id}>
                     <button
-                      onClick={() => onSelectLesson(lesson)}
+                      onClick={() => handleLessonClick(lesson)}
                       className="text-sm text-blue-600 hover:underline"
                     >
                       {lesson.title}

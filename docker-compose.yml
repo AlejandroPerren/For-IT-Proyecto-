@@ -1,0 +1,26 @@
+services:
+  backend:
+    build: ./apps/server
+    container_name: backend_service
+    ports:
+      - "4000:4000"
+    volumes:
+      - ./apps/server:/app/apps/server
+      - ./domain:/app/domain
+      - /app/node_modules
+    env_file:
+      - ./apps/server/src/environments/.env.development
+    environment:
+      NODE_ENV: development
+
+  frontend:
+    build: ./apps/client
+    container_name: frontend_service
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./apps/client:/app/apps/client
+      - ./domain:/app/domain
+      - /app/node_modules
+    depends_on:
+      - backend

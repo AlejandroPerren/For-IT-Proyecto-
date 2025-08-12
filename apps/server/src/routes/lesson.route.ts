@@ -7,7 +7,7 @@ const router = express.Router();
 const controller = lessonController();
 
 router.get("/:id",authorizeAccessToCourse, controller.findById);
-router.get("/section/:id",authorizeAccessToCourse, controller.findBySectionId);
+router.get("/section/:sectionId",authorizeAccessToCourse, controller.findBySectionId);
 router.post("/",authorizeCourseAccess, controller.createLesson);
 
 export default router

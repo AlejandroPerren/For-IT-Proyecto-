@@ -30,7 +30,7 @@ export async function authorizeAccessToCourse(
     const user = await userRepo.findById(userId);
     if (!user) return res.status(401).json({ message: "User not found" });
 
-    const courseId = parseInt(req.params.courseId || req.body.courseId);
+    const courseId = parseInt(req.params.courseId || req.params.id);
     if (isNaN(courseId))
       return res.status(400).json({ message: "Invalid or missing courseId" });
 

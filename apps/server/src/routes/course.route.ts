@@ -6,7 +6,7 @@ import { authorizeCourseAccess } from "../middleware/authorizeCourseCreation.mid
 const router = express.Router();
 const controller = courseController();
 
-router.get("/:id", authorizeAccessToCourse, controller.findById);
+router.get("/:courseId", authorizeAccessToCourse, controller.findById);
 router.post("/", authorizeCourseAccess, controller.createCourse);
 router.get("/", controller.findAllCourses);
 router.get("/all/:id", controller.findAllCourses);

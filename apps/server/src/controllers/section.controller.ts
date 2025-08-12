@@ -11,8 +11,8 @@ export function sectionController() {
   return {
     findByCourseId: async (req: Request, res: Response) => {
       try {
-        const { id } = req.params;
-        const idCourse = Number(id);
+        const { courseId } = req.params;
+        const idCourse = Number(courseId);
         const section = await service.findByCourseId(idCourse);
         return res.status(200).json({
           ok: true,

@@ -4,7 +4,7 @@ type LessonContentProps = {
 };
 
 const LessonContent: React.FC<LessonContentProps> = ({ videoUrl, textContent }) => {
-  if (videoUrl) {
+  if (videoUrl && videoUrl.trim() !== "") {
     return (
       <div className="w-full max-w-4xl">
         <video width="100%" controls>
@@ -15,7 +15,7 @@ const LessonContent: React.FC<LessonContentProps> = ({ videoUrl, textContent }) 
     );
   }
 
-  if (textContent) {
+  if (textContent && textContent.trim() !== "") {
     return (
       <div className="w-full max-w-4xl bg-white p-4 rounded shadow">
         <p className="text-gray-800 whitespace-pre-line">{textContent}</p>

@@ -9,9 +9,13 @@ export const loadFullCourseData = async () => {
     throw new Error("No hay curso seleccionado en localStorage");
   }
 
-  const course = JSON.parse(rawCourse);
-  const courseId = course.id;
-  const userId = 2;
+const { id: courseId } = JSON.parse(rawCourse);
+  const userString = localStorage.getItem("user");
+  if (!userString) {
+  console.log("falta ID");
+          return;
+        }
+        const { id } = JSON.parse(userString);
 
   const sections = await sectionOfCourse(courseId);
   localStorage.setItem("sections", JSON.stringify(sections));
@@ -22,7 +26,7 @@ export const loadFullCourseData = async () => {
   const lessons = allLessons.flat();
   localStorage.setItem("lessons", JSON.stringify(lessons));
 
-  const enrollment = await EnrollmentOfUser_Course(userId, courseId);
+  const enrollment = await EnrollmentOfUser_Course(id, courseId);
   localStorage.setItem("enrollment", JSON.stringify(enrollment));
 
   const allQuizzes = await Promise.all(
