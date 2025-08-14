@@ -2,7 +2,6 @@ import sequelize from '../../config/database';
 import User from './user';
 import Course from './course';
 import Enrollment from './enrollment';
-import Answer from './answer';
 import CompletedLesson from './completedlesson';
 import Lesson from './lesson';
 import Quiz from './quiz';
@@ -20,13 +19,6 @@ Enrollment.belongsTo(User, { foreignKey: 'userId', as: 'user' });
 
 Course.hasMany(Enrollment, { foreignKey: 'courseId', as: 'enrollments' });
 Enrollment.belongsTo(Course, { foreignKey: 'courseId', as: 'course' });
-
-// User ↔ Answer ↔ Quiz
-User.hasMany(Answer, { foreignKey: 'userId', as: 'answers' });
-Answer.belongsTo(User, { foreignKey: 'userId', as: 'user' });
-
-Quiz.hasMany(Answer, { foreignKey: 'quizId', as: 'answers' });
-Answer.belongsTo(Quiz, { foreignKey: 'quizId', as: 'quiz' });
 
 // Course ↔ Section ↔ Lesson ↔ Quiz
 Course.hasMany(Section, { foreignKey: 'courseId', as: 'sections' });
@@ -48,7 +40,6 @@ export {
   User,
   Course,
   Enrollment,
-  Answer,
   CompletedLesson,
   Lesson,
   Quiz,

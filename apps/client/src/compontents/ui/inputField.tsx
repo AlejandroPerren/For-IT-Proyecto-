@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FieldError, UseFormRegisterReturn } from "react-hook-form";
 import { Error } from "./ErrorMessage";
 
@@ -20,6 +20,13 @@ export const InputField = ({
   error,
 }: InputFieldProps) => {
   const [isFocused, setIsFocused] = useState(false);
+
+  useEffect(() => {
+    const el = document.getElementById(id) as HTMLInputElement | null;
+    if (el && el.value) {
+      setIsFocused(true);
+    }
+  }, [id]);
 
   return (
     <div className="relative" data-aos="fade-left">
@@ -43,5 +50,3 @@ export const InputField = ({
     </div>
   );
 };
-
-
