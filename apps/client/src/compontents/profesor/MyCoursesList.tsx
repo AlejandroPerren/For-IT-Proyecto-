@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import type { Course } from "../../interface/course.interface";
 import { useNavigate } from "react-router-dom";
-import { loadFullCourseData } from "../../utils/LoadCourseData";
+
 import { toast } from "react-toastify";
 import { myListCourses } from "../../network/fetch/ProfCourses";
 import CourseUsersModal from "./utils/UsersModal";
+import { getAllDataOfCourse } from "../../network/fetch/Courses";
 
 const MyCoursesList = () => {
   const [courses, setCourses] = useState<Course[]>([]);
@@ -12,10 +13,21 @@ const MyCoursesList = () => {
 
   const navigate = useNavigate();
 
-  const goToCourse = (course: Course) => {
-    localStorage.setItem("selectedCourse", JSON.stringify(course));
-    loadFullCourseData();
-    navigate("/course");
+  const goToCourse = async (course: Course) => {
+    try {
+      const userString = localStorage.getItem("user");
+      if (!userString) {
+        toast.error("Debes iniciar sesión para acceder al curso");
+        return;
+      }
+      const { id: userId } = JSON.parse(userString);
+      const courseData = await getAllDataOfCourse(course.id, userId);
+      localStorage.setItem("selectedCourse", JSON.stringify(courseData));
+      navigate("/course");
+    } catch (error) {
+      console.error(error);
+      toast.error("No se pudo cargar el curso");
+    }
   };
 
   const goToCreateCourse = () => {

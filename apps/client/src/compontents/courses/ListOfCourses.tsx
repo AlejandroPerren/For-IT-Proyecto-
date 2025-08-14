@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import {
+  getAllDataOfCourse,
   listOfCourses,
   listOfCoursesWhitIdUser,
 } from "../../network/fetch/Courses";
 import { toast } from "react-toastify";
 import type { Course } from "../../interface/course.interface";
 import { useNavigate } from "react-router-dom";
-import { loadFullCourseData } from "../../utils/LoadCourseData";
 import { createEnrollment } from "../../network/fetch/Enrollment";
 
 const ListOfCourses = () => {
@@ -14,10 +14,21 @@ const ListOfCourses = () => {
 
   const navigate = useNavigate();
 
-  const goToCourse = (course: Course) => {
-    localStorage.setItem("selectedCourse", JSON.stringify(course));
-    loadFullCourseData();
-    navigate("/course");
+  const goToCourse = async (course: Course) => {
+    try {
+      const userString = localStorage.getItem("user");
+      if (!userString) {
+        toast.error("Debes iniciar sesión para acceder al curso");
+        return;
+      }
+      const { id: userId } = JSON.parse(userString);
+      const courseData = await getAllDataOfCourse(course.id, userId);
+      localStorage.setItem("selectedCourse", JSON.stringify(courseData));
+      navigate("/course");
+    } catch (error) {
+      console.error(error);
+      toast.error("No se pudo cargar el curso");
+    }
   };
 
   const handleSubscribe = async (idCourse: number) => {
