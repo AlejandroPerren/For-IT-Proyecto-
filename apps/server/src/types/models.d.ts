@@ -7,7 +7,6 @@ declare module '../database/models' {
   export const Quiz: typeof Model;
   export const Section: typeof Model;
   export const Lesson: typeof Model;
-  export const Answer: typeof Model;
   export const CompletedLesson: typeof Model;
 
   export function initModels(sequelize: Sequelize): void;

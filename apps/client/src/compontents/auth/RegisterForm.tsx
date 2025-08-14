@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import type { TRegister } from "../../types/auth.types";
 import { useNavigate } from "react-router-dom";
-import {InputField} from "../ui/inputField";
+import { InputField } from "../ui/inputField";
 
 import { SignUp } from "../../network/fetch/Auth";
-import {PasswordInput} from "../ui/inputPassword";
+import { PasswordInput } from "../ui/inputPassword";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
@@ -38,7 +38,10 @@ const RegisterForm = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-2 mt-10">
+        <h1 className="m-2 text-center text-4xl font-extrabold p-5">
+          Hola, Ingresa tus datos para ingresar!!
+        </h1>
         <InputField
           label="name"
           id="name"
