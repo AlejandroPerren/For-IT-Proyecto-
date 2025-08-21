@@ -129,7 +129,7 @@ router.get("/lessons/:lessonId", authorizeAccessToCourse, controller.findByLesso
 ## Instalación y uso con Docker
 
 # Clonar repositorio
-git clone https://github.com/usuario/proyecto.git
+git clone https://github.com/AlejandroPerren/For-IT-Proyecto-
 cd proyecto
 
 # Crear archivo .env basado en .env.example
